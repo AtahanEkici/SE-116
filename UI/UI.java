@@ -5,28 +5,40 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Atahan Ekici
  */
 
-public final class UI extends JFrame implements ActionListener
+public final class UI extends JFrame implements ActionListener, ComponentListener
 {    
     private static UI single_instance = null;
     
@@ -36,9 +48,11 @@ public final class UI extends JFrame implements ActionListener
     }  
     
     JFrame main = new JFrame("SE116 Project - Main Frame");
-    JButton github_button,button,clear_button,about_button;
+    JButton github_button,clear_button,about_button;
     JTextArea jta;
     JMenuBar mb;
+    JMenu fileMenu,aboutMenu;
+    JMenuItem jm_read,jm_new,jm_about,jm_github;
     JScrollPane jsp;
     JOptionPane jop;
     
@@ -47,10 +61,11 @@ public final class UI extends JFrame implements ActionListener
     
     public void Construct_Main_Frame()       
     {
-       
+        main.setIconImage(new ImageIcon("Icons/icon.png").getImage());
         main.setLayout(new BorderLayout());
         main.setResizable(false);
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        main.addComponentListener(this);
         
         JPanel tutucu = new JPanel();
         tutucu.setLayout(new FlowLayout(FlowLayout.LEADING));
@@ -58,41 +73,48 @@ public final class UI extends JFrame implements ActionListener
         JPanel textArea = new JPanel();
         textArea.setLayout(new FlowLayout(FlowLayout.CENTER));
         
-        
         mb = new JMenuBar();
-        main.setJMenuBar(mb);
-
-        // Github Button Tanımı Başlangıç //
-        github_button = new JButton("GitHub");
-        github_button.setOpaque(true);
-        github_button.setFocusable(false);
-        github_button.addActionListener(this);
-        // Github Button Tanımı Bitiş //
-        
-         // Button Tanımı Başlangıç //
-         button = new JButton("Buton");
-         button.addActionListener(this);
-        // Button Tanımı Bitiş //
+        main.setJMenuBar(mb);      
+        mb.setBackground(Color.WHITE);
         
         // Clear_Button Tanımı Başlangıç //
-         clear_button = new JButton("Clear");
-         clear_button.addActionListener(this);
-         // Clear_Button Tanımı Bitişi //
-         
-         // About_Button Tanımı Başlangıç //
-         about_button = new JButton("About");
-         about_button.addActionListener(this);
-         // About_Button Tanımı Bitişi //
+        clear_button = new JButton("Clear");
+        clear_button.addActionListener(this);
+        clear_button.setBackground(Color.WHITE);
+        // Clear_Button Tanımı Bitişi //
+
+        fileMenu = new JMenu("File");
+        fileMenu.setFocusable(true);
         
-        mb.add(github_button);
-        mb.add(button);
-        mb.add(clear_button);
-        mb.add(about_button);
+        
+        jm_read = fileMenu.add("Open");
+        jm_read.addActionListener(this);
+        jm_read.setBackground(Color.WHITE);
+        
+        jm_new = fileMenu.add("Save");
+        jm_new.addActionListener(this);
+        jm_new.setBackground(Color.WHITE);
+        
+        aboutMenu = new JMenu("About");
+        aboutMenu.setFocusable(true);
+        
+        jm_about = aboutMenu.add("About This Project");
+        jm_about.addActionListener(this);
+        jm_about.setBackground(Color.WHITE);
+        
+        jm_github = aboutMenu.add("GitHub Page");
+        jm_github.addActionListener(this);
+        jm_github.setBackground(Color.WHITE);
+        
+        mb.add(fileMenu);
+        mb.add(aboutMenu);
+        
+        tutucu.add(clear_button,BorderLayout.CENTER);
         
         jsp = new JScrollPane();
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
        
-        jta = new JTextArea(45,70);
+        jta = new JTextArea(35,55);
         jta.setBorder(new LineBorder(Color.BLACK));
         jta.setEditable(false);
         
@@ -102,14 +124,16 @@ public final class UI extends JFrame implements ActionListener
                      
         textArea.add(jsp);
   
+
         main.add(textArea,BorderLayout.PAGE_END); // Text'leri tutan panelin JFrame'e iliştirilmesi //
-        main.add(tutucu,BorderLayout.AFTER_LINE_ENDS);
-        main.pack(); // Function that packs the frame and cuts the unnecessary lines //
+        main.add(tutucu,BorderLayout.NORTH);
         
         main.setLocationRelativeTo(null); // initially start the frame at the center of the screen //
+        main.pack(); // Function that packs the frame and cuts the unnecessary lines //
         main.setVisible(true);  
         
     }
+    
     
     public static UI getInstance() // Singleton Pattern //
     {
@@ -120,42 +144,90 @@ public final class UI extends JFrame implements ActionListener
             return single_instance;    
     }
 
+    
+   // Action Event Handling //
+    
     @Override
     public void actionPerformed(ActionEvent Event) // Action Listener instructions //
     {
-        if(Event.getSource() == github_button) // The switch case only allows primitive types so i can not use it here back to if-else //
+        if(Event.getSource() == jm_github) // The switch case only allows primitive types so i can not use it here back to if-else //
     {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) // if the github button is pressed on the main frame //
             {
                 try 
                 {
-                    Desktop.getDesktop().browse(new URI("https://github.com/AtahanEkici/SE-116"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/AtahanEkici/SE-116/tree/Project"));
                     jta.append(""+counter+") Opened github page on  default browser \n\n");
                     counter++;
                 } catch (Exception e) 
                 {
                      jta.append(""+counter+") Error: "+e.getClass().getCanonicalName()+" \n\n ");
                      counter++;
-                JOptionPane.showMessageDialog( null, ""+e+"", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
+                JOptionPane.showMessageDialog( null, ""+e.getMessage()+"", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
                 }
             }
     }
-        else if(Event.getSource() == button)
+        
+        else if(Event.getSource() == jm_new) 
+    {
+       try
+     {  
+               String text = null;
+               while(text == null || text.trim().equals(""))
+               {
+                   text = JOptionPane.showInputDialog(null,"Please enter something","Specify Input",INFORMATION_MESSAGE);
+                           
+                   if(text == null)
+                   {
+                       JOptionPane.showMessageDialog( null, "Lütfen bir değer girin", "Just Type Something", JOptionPane.ERROR_MESSAGE);
+                   }  
+               }
+               BufferedWriter writer;
+               JFileChooser fileChooser;
+               fileChooser = new JFileChooser(System.getProperty("user.home") +"/Desktop");
+               fileChooser.setFileFilter(new FileNameExtensionFilter("txt file","txt"));
+               fileChooser.setSelectedFile(new File(""+new Date().getTime()+".txt"));
+               int result = fileChooser.showSaveDialog(null);
+               
+               if(result == JFileChooser.APPROVE_OPTION)
+               {
+                writer = new BufferedWriter(new FileWriter(fileChooser.getSelectedFile()));
+                writer.append(text);
+                writer.close();
+                JOptionPane.showMessageDialog(null, "File has been saved","File Saved",JOptionPane.INFORMATION_MESSAGE);
+               }
+    } catch (Exception e) 
+    {
+        if(e instanceof IOException)
+        {
+            JOptionPane.showMessageDialog( null, "Dosya oluştururken hata oluştu", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
+        }
+        else
+        {
+            jta.append(""+counter+") Error: "+e.getClass().getCanonicalName()+" \n\n ");
+                counter++;
+                JOptionPane.showMessageDialog( null, ""+e.getMessage()+"", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
+        }         
+    }
+  }
+    
+        else if(Event.getSource() == jm_read)
         {
             try
             {
                JFileChooser fileChooser;
                fileChooser = new JFileChooser(System.getProperty("user.home") +"/Desktop");
+               fileChooser.setFileFilter(new FileNameExtensionFilter("txt file","txt"));
                int result = fileChooser.showOpenDialog(getParent());
                
                if (result == JFileChooser.APPROVE_OPTION) 
                {
-                  jta.append(""+counter+") File selection successfull \n\n");
+                  jta.append(""+counter+") Dosya başarıyla okundu : ");
                   counter++;
                }
                else
                {
-                    jta.append(""+counter+") File selection fail \n\n");
+                    jta.append(""+counter+") Dosya okunamadı \n\n");
                     counter++;
                }
                
@@ -172,13 +244,12 @@ public final class UI extends JFrame implements ActionListener
                         stringBuilder.append(line);
                         stringBuilder.append(ls);
                     }
-                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                    reader.close();
                 }
                 
-String content = stringBuilder.toString();
-jta.append(""+counter+") \n "+content+" \n\n");
+String content = stringBuilder.toString().replaceAll(" ", "");
+jta.append(""+content+" \n\n");
 counter++;
-
 }catch(Exception e)
             {
                 if(e instanceof NullPointerException)
@@ -191,7 +262,6 @@ counter++;
                  counter++;
                  JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
                 }
-                 
             }
         }
         
@@ -209,13 +279,14 @@ counter++;
             }
         }
         
-        else if(Event.getSource() == about_button)
+        else if(Event.getSource() == jm_about)
         {
             try
             {   
                 JOptionPane.showMessageDialog(null,"<html><font color=#0066ff> <u> <br> Java Swing Application </br> </u> </font> \n"
                         + "<html><font color=#0066ff><u> <br> Java </br>: </u> </font> 1.8.0_111 \n"
-                        + "<html><font color=#0066ff> <u> <br> IDE </br>:  </u> </font> Netbeans IDE 12.0","About This Project",JOptionPane.INFORMATION_MESSAGE);     
+                        + "<html><font color=#0066ff> <u> <br> IDE </br>:  </u> </font> Netbeans IDE 12.0 \n"
+                        + "<html><font color=#0066ff><u> <br> Icon </br>: </u> </font> www.flaticon.com","About This Project",JOptionPane.INFORMATION_MESSAGE);     
             }catch(Exception e)
             {
                 jta.append(""+counter+") Error: "+e.getClass().getCanonicalName()+" \n\n ");
@@ -223,7 +294,32 @@ counter++;
                 JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
             }
             // Exception Handling //
-
         }
+        
+      
 }
+
+    @Override
+    public void componentResized(ComponentEvent ce)
+    {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent ce) 
+    {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent ce)
+    {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent ce) 
+    {
+
+    }
 }
