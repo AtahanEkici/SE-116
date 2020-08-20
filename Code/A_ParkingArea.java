@@ -6,14 +6,22 @@ package Code;
  */
 public class A_ParkingArea extends Park_Area
 {
+    public final int park_slot;
+    
     public A_ParkingArea(double fee)
     {
         this.fee = fee;
+        parks.add(this);
+        this.park_slot = parks.size();
+        this.Is_Occupied = false;
     }
     
      public A_ParkingArea()
     {
         this.fee = 10.0;
+        parks.add(this);
+        this.park_slot = parks.size();
+        this.Is_Occupied = false;
     } 
      
       public double calculate_Discount(int second)        

@@ -8,22 +8,9 @@ import java.util.ArrayList;
  */
 public abstract class Park_Area
 {
-    private final int park_slot;
-    protected ArrayList<Park_Area> parks = new ArrayList();
+    public static ArrayList<Park_Area> parks = new ArrayList();
     protected double  fee;
-    protected boolean Is_Occupied;
-    
-    Park_Area()
-    {
-       parks.add(this);
-       park_slot = parks.size();
-       Is_Occupied = false;
-    }
-    
-    public int get_parkingNumber()
-    {
-        return this.park_slot;
-    }
+    protected boolean Is_Occupied; 
     
     public void set_fee(int fee)
     {
@@ -48,7 +35,7 @@ public abstract class Park_Area
    @Override
     public String toString()
      {
-         return "Parking Slot Number: "+this.park_slot+" Fee: "+this.fee+"";
+         return "Fee: "+this.get_fee()+"\n Occupation: "+this.get_Occupation()+"";
      }
     
     public double calculate_Discount(int hour,Park_Area park)
