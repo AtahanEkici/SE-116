@@ -1,15 +1,13 @@
-
 package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,25 +29,42 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
  * @author Atahan Ekici
  */
-
-public final class UI extends JFrame implements ActionListener, ComponentListener
+public final class UI extends JFrame implements ActionListener , MouseListener
 {    
     private static UI single_instance = null;
     
-    UI()
+        public static UI getInstance() // Singleton Pattern so that only one frame will open //
     {
-        Construct_Main_Frame();
-    }  
+        if(single_instance == null)
+        {
+            single_instance = new UI();
+        }
+            return single_instance;    
+    }
     
-    JFrame main = new JFrame("SE116 Project - Main Frame");
-    JButton github_button,clear_button,about_button;
+    private UI()
+    {
+        try
+        {
+            Construct_Main_Frame();
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
+        }
+        
+    }  
+
+    public static final Color PALE_BLACK = new Color(33, 37, 41);
+    
+    JFrame main;
+    JButton clear_button,refresh_button;
     JTextArea jta;
     JMenuBar mb;
     JMenu fileMenu,aboutMenu;
@@ -56,36 +72,48 @@ public final class UI extends JFrame implements ActionListener, ComponentListene
     JScrollPane jsp;
     JOptionPane jop;
     
-    public int counter = 1;
-    
+    public int counter = 1;  
     
     public void Construct_Main_Frame()       
     {
+        main = new JFrame("SE116 Project - Main Frame");
+        main.setForeground(PALE_BLACK);
+        main.setBackground(PALE_BLACK);
         main.setIconImage(new ImageIcon("Icons/icon.png").getImage());
         main.setLayout(new BorderLayout());
         main.setResizable(false);
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        main.addComponentListener(this);
         
         JPanel tutucu = new JPanel();
-        tutucu.setLayout(new FlowLayout(FlowLayout.LEADING));
+        tutucu.setLayout(new FlowLayout());
+        tutucu.setBackground(PALE_BLACK);
         
         JPanel textArea = new JPanel();
         textArea.setLayout(new FlowLayout(FlowLayout.CENTER));
+        textArea.setBackground(Color.BLACK);
         
         mb = new JMenuBar();
         main.setJMenuBar(mb);      
-        mb.setBackground(Color.WHITE);
+        mb.setBorder(BorderFactory.createLineBorder(PALE_BLACK));
         
         // Clear_Button Tanımı Başlangıç //
         clear_button = new JButton("Clear");
         clear_button.addActionListener(this);
         clear_button.setBackground(Color.WHITE);
+        clear_button.setFocusable(false);
         // Clear_Button Tanımı Bitişi //
+
+        // Refresh_Button Tanımı Başlangıç //
+        refresh_button = new JButton("Refresh");
+        refresh_button.addActionListener(this);
+        refresh_button.setBackground(Color.WHITE);
+        refresh_button.setFocusable(false);
+        // Refresh_Button Tanımı Bitişi //
 
         fileMenu = new JMenu("File");
         fileMenu.setFocusable(true);
-        
+        fileMenu.setForeground(Color.BLACK);
+        fileMenu.addMouseListener(this);
         
         jm_read = fileMenu.add("Open");
         jm_read.addActionListener(this);
@@ -97,6 +125,8 @@ public final class UI extends JFrame implements ActionListener, ComponentListene
         
         aboutMenu = new JMenu("About");
         aboutMenu.setFocusable(true);
+        aboutMenu.setForeground(Color.BLACK);
+        aboutMenu.addMouseListener(this);
         
         jm_about = aboutMenu.add("About This Project");
         jm_about.addActionListener(this);
@@ -110,40 +140,35 @@ public final class UI extends JFrame implements ActionListener, ComponentListene
         mb.add(aboutMenu);
         
         tutucu.add(clear_button,BorderLayout.CENTER);
+        tutucu.add(refresh_button,BorderLayout.CENTER);
+        tutucu.setBorder(null);
         
         jsp = new JScrollPane();
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-       
+        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jsp.setBorder(null);
+        
+        jsp.getVerticalScrollBar().setBackground(PALE_BLACK);
+        jsp.getHorizontalScrollBar().setBackground(PALE_BLACK);
+        
         jta = new JTextArea(35,55);
-        jta.setBorder(new LineBorder(Color.BLACK));
+        jta.setForeground(Color.WHITE);
+        jta.setBackground(Color.BLACK);
         jta.setEditable(false);
         
-        jsp.getViewport().setBackground(Color.WHITE);
         jsp.getViewport().add(jta);
         add(jsp);
                      
         textArea.add(jsp);
+        textArea.setBorder(null);
   
-
         main.add(textArea,BorderLayout.PAGE_END); // Text'leri tutan panelin JFrame'e iliştirilmesi //
-        main.add(tutucu,BorderLayout.NORTH);
+        main.add(tutucu,BorderLayout.NORTH); // Butonları tutan panelin Ana Frame'e eklenmesi //
         
-        main.setLocationRelativeTo(null); // initially start the frame at the center of the screen //
         main.pack(); // Function that packs the frame and cuts the unnecessary lines //
-        main.setVisible(true);  
-        
+        main.setLocationRelativeTo(null); // initially start the frame at the center of the screen //
+        main.setVisible(true);        
     }
-    
-    
-    public static UI getInstance() // Singleton Pattern //
-    {
-        if(single_instance == null)
-        {
-            single_instance = new UI();
-        }
-            return single_instance;    
-    }
-
     
    // Action Event Handling //
     
@@ -167,6 +192,16 @@ public final class UI extends JFrame implements ActionListener, ComponentListene
                 }
             }
     }
+        
+        else if(Event.getSource() == refresh_button)
+        {
+            main.setVisible(false);
+            main.dispose();
+            
+            main.repaint();
+            main.revalidate();
+            main.setVisible(true);
+        }
         
         else if(Event.getSource() == jm_new) 
     {
@@ -250,6 +285,8 @@ public final class UI extends JFrame implements ActionListener, ComponentListene
 String content = stringBuilder.toString().replaceAll(" ", "");
 jta.append(""+content+" \n\n");
 counter++;
+validate();
+repaint();
 }catch(Exception e)
             {
                 if(e instanceof NullPointerException)
@@ -270,6 +307,8 @@ counter++;
             try
             {
                 jta.setText(""); // Clears all text from JTextArea //
+                validate();
+                repaint();
                 counter = 1;
             }catch(Exception e)
             {
@@ -284,42 +323,59 @@ counter++;
             try
             {   
                 JOptionPane.showMessageDialog(null,"<html><font color=#0066ff> <u> <br> Java Swing Application </br> </u> </font> \n"
-                        + "<html><font color=#0066ff><u> <br> Java </br>: </u> </font> 1.8.0_111 \n"
-                        + "<html><font color=#0066ff> <u> <br> IDE </br>:  </u> </font> Netbeans IDE 12.0 \n"
-                        + "<html><font color=#0066ff><u> <br> Icon </br>: </u> </font> www.flaticon.com","About This Project",JOptionPane.INFORMATION_MESSAGE);     
+                        + "<html><font color=#0066ff><u> <br> Java</br></u>: </font>  1.8.0_111 </html> \n"
+                        + "<html><font color=#0066ff> <u> <br> IDE</br></u>: </font>  Apache Netbeans IDE 12.0 </html>\n"
+                        + "<html><font color=#0066ff><u> <br> Icon</br></u>: </font>  www.flaticon.com </html>","About This Project",JOptionPane.INFORMATION_MESSAGE);     
             }catch(Exception e)
             {
                 jta.append(""+counter+") Error: "+e.getClass().getCanonicalName()+" \n\n ");
                 counter++;
                 JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
             }
-            // Exception Handling //
-        }
-        
-      
+        }     
 }
 
     @Override
-    public void componentResized(ComponentEvent ce)
+    public void mouseClicked(MouseEvent me) 
     {
-
+        // Not Needed //
     }
 
     @Override
-    public void componentMoved(ComponentEvent ce) 
+    public void mousePressed(MouseEvent me) 
     {
-
+        // Not Needed //
     }
 
     @Override
-    public void componentShown(ComponentEvent ce)
+    public void mouseReleased(MouseEvent me) 
     {
-
+        // Not Needed //
     }
 
     @Override
-    public void componentHidden(ComponentEvent ce) 
+    public void mouseEntered(MouseEvent me) 
     {
+        if(me.getSource() == fileMenu)
+        {
+            fileMenu.setSelected(true); // begin hover effect //
+        }
+        else if(me.getSource() == aboutMenu)
+        {
+            aboutMenu.setSelected(true); // begin hover effect //
+        }
+    }
 
+    @Override
+    public void mouseExited(MouseEvent me)
+    {
+        if(me.getSource() == fileMenu)
+        {
+            fileMenu.setSelected(false); // dispose hover effect //
+        }
+        else if(me.getSource() == aboutMenu)
+        {
+            aboutMenu.setSelected(false); // dispose hover effect //
+        }
     }
 }
