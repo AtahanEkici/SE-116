@@ -24,6 +24,12 @@ public class B_ParkingArea extends Park_Area
         this.Is_Occupied = false;
     }
     
+    public int get_parkingSlot()
+    {
+        return this.park_slot;
+    }
+    
+    @Override
     public double calculate_Discount(int second)        
       {
          double park_fee_brut = (this.get_fee() / 7200); // get the parking fee of the park area //

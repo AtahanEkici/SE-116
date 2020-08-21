@@ -207,8 +207,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         park.getContentPane().setBackground(PALE_BLACK);
         park.setIconImage(new ImageIcon("Icons/park.png").getImage());
         park.setLayout(new BorderLayout());
-        park.setResizable(false);
         park.setSize(500, 500);
+        park.setResizable(true);
         park.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         
         jpm = new JPopupMenu();
@@ -219,8 +219,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         pop_stop_timer = new JMenuItem("Stop Timer");
         pop_stop_timer.addActionListener(this);
         
-        jpm.add(pop_properties);
         jpm.add(pop_stop_timer);
+        jpm.add(pop_properties);
         
         jpm.addMouseListener(this);
         
@@ -356,7 +356,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             timer1 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -386,7 +386,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             timer2 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -413,12 +413,10 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         {
             park3_button.setEnabled(false);
             a3.set_Occupation(true);
-            
-            
-            
+
             timer3 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -445,11 +443,10 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         {
             park4_button.setEnabled(false);
             b1.set_Occupation(true);
-            
-            
+ 
             timer4 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -477,10 +474,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             park5_button.setEnabled(false);
             b2.set_Occupation(true);
             
-            
             timer5 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -508,10 +504,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             park6_button.setEnabled(false);
             b3.set_Occupation(true);
             
-            
             timer6 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -541,7 +536,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             timer7 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -571,7 +566,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             timer8 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -601,7 +596,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             timer9 = new Timer(1000, new ActionListener() 
             {
-                int i = 7200;
+                int i = 7201;
                 
                 @Override
                 public void actionPerformed(ActionEvent e) 
@@ -630,47 +625,47 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             if(invoker == park1_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a1.park_slot+"\n"+a1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a1.get_parkingSlot()+"\n"+a1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park2_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a2.park_slot+"\n"+a2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a2.get_parkingSlot()+"\n"+a2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park3_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a3.park_slot+"\n"+a3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a3.get_parkingSlot()+"\n"+a3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park4_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b1.park_slot+"\n"+b1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b1.get_parkingSlot()+"\n"+b1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park5_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b2.park_slot+"\n"+b2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b2.get_parkingSlot()+"\n"+b2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park6_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b3.park_slot+"\n"+b3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b3.get_parkingSlot()+"\n"+b3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park7_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c1.park_slot+"\n"+c1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c1.get_parkingSlot()+"\n"+c1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park8_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c2.park_slot+"\n"+c2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c2.get_parkingSlot()+"\n"+c2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park9_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c3.park_slot+"\n"+c3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c3.get_parkingSlot()+"\n"+c3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
         }
         
@@ -973,19 +968,19 @@ repaint();
     @Override
     public void mouseClicked(MouseEvent me) 
     {
-        ShowPopup(me);
+        ShowPopupMenu(me);
     }
 
     @Override
     public void mousePressed(MouseEvent me) 
     {
-        ShowPopup(me);
+        ShowPopupMenu(me);
     }
 
     @Override
     public void mouseReleased(MouseEvent me) 
     {
-        ShowPopup(me);
+        ShowPopupMenu(me);
     }
 
     @Override
@@ -1014,7 +1009,7 @@ repaint();
         }
     }
     
-    private void ShowPopup(MouseEvent me) 
+    private void ShowPopupMenu(MouseEvent me) 
     {
         if (me.isPopupTrigger()) 
         {
