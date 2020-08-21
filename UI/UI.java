@@ -35,6 +35,10 @@ import javax.swing.JTextArea;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Code.*;
+import static Code.Utilities.SHA_256;
+import static Code.Utilities.getCurrentTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -85,6 +89,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
     // ------------------------------------- Swing Components ------------------------------------- //
     
     Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
+    String key1,key2,key3,key4,key5,key6,key7,key8,key9;
     
     A_ParkingArea a1 = new A_ParkingArea();
     A_ParkingArea a2 = new A_ParkingArea();
@@ -203,7 +208,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
     
     public void Construct_Parking_slots()
     {
-        park = new JFrame("SE116 Project - Main Frame");
+        park = new JFrame("Park Menu");
         park.getContentPane().setBackground(PALE_BLACK);
         park.setIconImage(new ImageIcon("Icons/park.png").getImage());
         park.setLayout(new BorderLayout());
@@ -335,9 +340,76 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         main.revalidate();
         main.setVisible(true);
     }
-
-   // Action Event Handling //
     
+    public void Save_To_File(String text)
+    {
+               BufferedWriter writer;
+               JFileChooser jfc;
+               jfc = new JFileChooser(System.getProperty("user.home") +"/Desktop");
+               jfc.setFileFilter(new FileNameExtensionFilter("Ticket Files","ticket"));
+               jfc.setSelectedFile(new File(""+new Date().getTime()+".ticket"));
+               int result = jfc.showSaveDialog(null);
+               
+               if(result == JFileChooser.APPROVE_OPTION)
+               {
+                   try 
+                   {
+                       writer = new BufferedWriter(new FileWriter(jfc.getSelectedFile()));
+                       writer.append(text);
+                       writer.close();
+                       JOptionPane.showMessageDialog(null, "Your ticket has been saved","File Saved",JOptionPane.INFORMATION_MESSAGE);
+                   } 
+                   catch (Exception e) 
+                   {
+                     JOptionPane.showMessageDialog(null,""+e+"","ERROR!",JOptionPane.ERROR_MESSAGE);  
+                   }
+               }
+               else
+               {
+                    JOptionPane.showMessageDialog(null,"Could not save ticket","ERROR!",JOptionPane.ERROR_MESSAGE);
+               }
+    }
+    
+    public String Check_Key()
+    {
+        String content = null;
+        
+        try
+            {
+               JFileChooser fileChooser;
+               fileChooser = new JFileChooser(System.getProperty("user.home") +"/Desktop");
+               fileChooser.setFileFilter(new FileNameExtensionFilter("Ticket Files","ticket"));
+               fileChooser.showOpenDialog(null);
+               File selectedFile = fileChooser.getSelectedFile();
+               StringBuilder stringBuilder;
+               
+                try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) 
+                {
+                    stringBuilder = new StringBuilder();
+                    String line;
+                    String ls = System.getProperty("line.separator");
+                    while ((line = reader.readLine()) != null)
+                    {
+                        stringBuilder.append(line);
+                    }
+                    content = stringBuilder.toString().trim();
+                    System.out.println("Content:"+content);
+                }              
+}catch(Exception e)
+            {
+                if(e instanceof NullPointerException)
+                {
+                    JOptionPane.showMessageDialog( null, "Dosya Seçilmedi", "HATA!", JOptionPane. ERROR_MESSAGE);
+                }
+                else
+                {
+                 JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
+                }
+            }
+        return content;
+    }
+    
+   // Action Event Handling //
     @Override
     public void actionPerformed(ActionEvent Event) // Action Listener instructions //
     {
@@ -351,9 +423,11 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park1_button)
         { 
+            key1  = SHA_256("park1_button"+getCurrentTime());
+            Save_To_File(key1);
             park1_button.setEnabled(false);
             a1.set_Occupation(true);
-            
+
             timer1 = new Timer(1000, new ActionListener() 
             {
                 int i = 7201;
@@ -381,6 +455,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park2_button)
         {
+            key2 = SHA_256("park2_button"+getCurrentTime());
+            Save_To_File(key2);
             park2_button.setEnabled(false);
             a2.set_Occupation(true);
             
@@ -411,6 +487,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park3_button)
         {
+            key3 = SHA_256("park3_button"+getCurrentTime());
+            Save_To_File(key3);
             park3_button.setEnabled(false);
             a3.set_Occupation(true);
 
@@ -441,6 +519,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park4_button)
         {
+            key4 = SHA_256("park4_button"+getCurrentTime());
+            Save_To_File(key4);
             park4_button.setEnabled(false);
             b1.set_Occupation(true);
  
@@ -471,6 +551,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park5_button)
         {
+            key5 = SHA_256("park5_button"+getCurrentTime());
+            Save_To_File(key5);
             park5_button.setEnabled(false);
             b2.set_Occupation(true);
             
@@ -500,7 +582,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         }
         
         else if(Event.getSource() == park6_button)
-        {
+        { 
+            key6 = SHA_256("park6_button"+getCurrentTime());
+            Save_To_File(key6);
             park6_button.setEnabled(false);
             b3.set_Occupation(true);
             
@@ -531,6 +615,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park7_button)
         {
+            key7 = SHA_256("park7_button"+getCurrentTime());
+            Save_To_File(key7);
             park7_button.setEnabled(false);
             c1.set_Occupation(true);
             
@@ -561,6 +647,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park8_button)
         {
+            SHA_256("park8_button"+getCurrentTime());
+            Save_To_File(key8);
             park8_button.setEnabled(false);
             c2.set_Occupation(true);
             
@@ -591,6 +679,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         
         else if(Event.getSource() == park9_button)
         {
+            key9 = SHA_256("park9_button"+getCurrentTime());
+            Save_To_File(key9);
             park9_button.setEnabled(false);
             c3.set_Occupation(true);
             
@@ -677,14 +767,25 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             {
                 if(timer1 == null || timer1.isRunning() == false)
                 {
-                    JOptionPane.showMessageDialog( null, "Timer is not running!", "ERROR!", JOptionPane. ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Timer is not running!","ERROR!",JOptionPane.ERROR_MESSAGE);
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key1))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);
                     timer1.stop();
                     park1_button.setEnabled(true);
                     park1_button.setText("Park_1(A)");
                     a1.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
                 }
             }
             
@@ -696,10 +797,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key2))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer2.stop();
                     park2_button.setEnabled(true);
                     park2_button.setText("Park_2(A)");
                     a2.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -711,10 +822,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key3))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer3.stop();
                     park3_button.setEnabled(true);
                     park3_button.setText("Park_3(A)");
                     a3.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -726,10 +847,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key4))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer4.stop();
                     park4_button.setEnabled(true);
                     park4_button.setText("Park_4(B)");
                     b1.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -741,10 +872,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key5))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer5.stop();
                     park5_button.setEnabled(true);
                     park5_button.setText("Park_5(B)");
                     b2.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -756,10 +897,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key6))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer6.stop();
                     park6_button.setEnabled(true);
                     park6_button.setText("Park_6(B)");
                     b3.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -771,10 +922,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key7))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer7.stop();
                     park7_button.setEnabled(true);
                     park7_button.setText("Park_7(C)");
                     c1.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -786,10 +947,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key8))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer8.stop();
                     park8_button.setEnabled(true);
                     park8_button.setText("Park_8(C)");
                     c2.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
             
@@ -801,10 +972,20 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                 }
                 else
                 {
+                    String selected = Check_Key().trim();
+                    
+                    if(selected.equals(key9))
+                    {
+                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer9.stop();
                     park9_button.setEnabled(true);
                     park9_button.setText("Park_9(C)");
                     c3.set_Occupation(false);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Key is not identified","ERROR!", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         }

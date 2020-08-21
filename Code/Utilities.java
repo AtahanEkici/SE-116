@@ -2,7 +2,6 @@ package Code;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +13,7 @@ import javax.swing.JOptionPane;
  */
 public class Utilities 
 {
+    
 public static String getCurrentTime()
 {
 Date date = new Date();
@@ -35,7 +35,7 @@ int minute = (seconds / 60)%60;
 int sec = seconds % 60;
 return String.format("%02d:%02d:%02d", hour,minute,sec);
 }
-    
+
 public static String SHA_256(String text)
 {
 String hashed = null;
