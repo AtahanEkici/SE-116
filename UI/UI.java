@@ -1,43 +1,8 @@
 package UI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Date;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.Timer;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import Code.*;
-import static Code.Utilities.SHA_256;
-import static Code.Utilities.getCurrentTime;
-import Interface.Interface_Container;
+import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;import java.awt.Desktop;import java.awt.FlowLayout;import java.awt.GridLayout;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.MouseEvent;import java.awt.event.MouseListener;import java.io.BufferedReader;import java.io.BufferedWriter;import java.io.File;import java.io.FileReader;import java.io.FileWriter;import java.io.IOException;import java.net.URI;import java.util.Date;import javax.swing.BorderFactory;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFileChooser;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuBar;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import static javax.swing.JOptionPane.INFORMATION_MESSAGE;import javax.swing.JPanel;import javax.swing.JPopupMenu;import javax.swing.JScrollPane;import javax.swing.JTextArea;import javax.swing.Timer;import javax.swing.filechooser.FileNameExtensionFilter;import Code.*;import static Code.Utilities.SHA_256;import static Code.Utilities.getCurrentTime;import Interface.Interface_Container;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -62,7 +27,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         {
             Construct_Main_Frame();
             Construct_Parking_slots();
-            //Construct_Payment_Frame();
+            Construct_Payment_Frame();
         }
         catch(Exception e)
         {
@@ -91,6 +56,10 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
     String key1,key2,key3,key4,key5,key6,key7,key8,key9;
     int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
+    File file1,file2,file3,file4,file5,file6,file7,fiile8,file9;
+    
+    int current_operation;
+    double current_fee;
     
     A_ParkingArea a1 = new A_ParkingArea();
     A_ParkingArea a2 = new A_ParkingArea();
@@ -211,9 +180,18 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         payment = new JFrame("Payment Menu");
         payment.setIconImage(new ImageIcon("Icons/money.png").getImage());
         payment.setLayout(new GridLayout());
-        payment.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        payment.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         payment.setSize(500, 250);
         payment.getContentPane().setBackground(PALE_BLACK);
+        
+        payment.addWindowListener(new WindowAdapter() 
+{
+    @Override
+    public void windowClosing(WindowEvent e) 
+    {
+        JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+});
         
         JPanel tutucu = new JPanel();
         tutucu.setLayout(new GridLayout());
@@ -372,6 +350,18 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         main.setVisible(true);
     }
     
+    public void deleteFile(File file)
+    {
+    if (file.delete())
+    { 
+      JOptionPane.showMessageDialog( null, "File Deleted Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+    } 
+    else 
+    {
+      JOptionPane.showMessageDialog( null, "Could not delete the ticket", "ERROR!", JOptionPane.ERROR_MESSAGE);
+    } 
+    }
+    
     public void Save_To_File(String text)
     {
                BufferedWriter writer;
@@ -419,7 +409,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {
                     stringBuilder = new StringBuilder();
                     String line;
-                    String ls = System.getProperty("line.separator");
                     while ((line = reader.readLine()) != null)
                     {
                         stringBuilder.append(line);
@@ -430,7 +419,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
             {
                 if(e instanceof NullPointerException)
                 {
-                    JOptionPane.showMessageDialog( null, "Dosya Seçilmedi", "HATA!", JOptionPane. ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog( null, "No File was selected ", "ERROR!", JOptionPane. ERROR_MESSAGE);
                 }
                 else
                 {
@@ -824,11 +813,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key1))
                     {
-                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a1.calculate_Discount(offset1)+"","Success", JOptionPane.PLAIN_MESSAGE);
+                    current_fee = a1.calculate_Discount(offset1);
                     timer1.stop();
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a1.calculate_Discount(offset1)+"","Success", JOptionPane.INFORMATION_MESSAGE);
                     park1_button.setEnabled(true);
                     park1_button.setText("Park_1(A)");
                     a1.set_Occupation(false);
+                    current_operation = 1;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -849,12 +841,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     String selected = Check_Key().trim();
                     
                     if(selected.equals(key2))
-                    {   
+                    {
+                    current_fee = a2.calculate_Discount(offset2);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a2.calculate_Discount(offset2)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer2.stop();
                     a2.set_Occupation(false);
                     park2_button.setText("Park_2(A)");
                     park2_button.setEnabled(true);
+                    current_operation = 2;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -875,11 +870,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key3))
                     {   
+                    current_fee = a3.calculate_Discount(offset3);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a3.calculate_Discount(offset3)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer3.stop();
                     park3_button.setEnabled(true);
                     park3_button.setText("Park_3(A)");
                     a3.set_Occupation(false);
+                    current_operation = 3;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -900,11 +898,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key4))
                     {
+                    current_fee = b1.calculate_Discount(offset4);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b1.calculate_Discount(offset4)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer4.stop();
                     park4_button.setEnabled(true);
                     park4_button.setText("Park_4(B)");
                     b1.set_Occupation(false);
+                    current_operation = 4;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -925,11 +926,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key5))
                     {
+                    current_fee = b2.calculate_Discount(offset5);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b2.calculate_Discount(offset5)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer5.stop();
                     park5_button.setEnabled(true);
                     park5_button.setText("Park_5(B)");
                     b2.set_Occupation(false);
+                    current_operation = 5;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -950,11 +954,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key6))
                     {
+                    current_fee = b3.calculate_Discount(offset6);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b3.calculate_Discount(offset6)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer6.stop();
                     park6_button.setEnabled(true);
                     park6_button.setText("Park_6(B)");
                     b3.set_Occupation(false);
+                    current_operation = 6;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -974,12 +981,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     String selected = Check_Key().trim();
                     
                     if(selected.equals(key7))
-                    {    
+                    {
+                    current_fee = c1.calculate_Discount(offset7);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c1.calculate_Discount(offset7)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer7.stop();
                     park7_button.setEnabled(true);
                     park7_button.setText("Park_7(C)");
                     c1.set_Occupation(false);
+                    current_operation = 7;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1000,11 +1010,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key8))
                     {
+                    current_fee = c2.calculate_Discount(offset8);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c2.calculate_Discount(offset8)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer8.stop();
                     park8_button.setEnabled(true);
                     park8_button.setText("Park_8(C)");
                     c2.set_Occupation(false);
+                    current_operation = 8;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1025,11 +1038,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key9))
                     {
+                    current_fee = c3.calculate_Discount(offset9);    
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c3.calculate_Discount(offset9)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer9.stop();
                     park9_button.setEnabled(true);
                     park9_button.setText("Park_9(C)");
                     c3.set_Occupation(false);
+                    current_operation = 9;
+                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1182,7 +1198,7 @@ repaint();
         {
             try
             {   
-                JOptionPane.showMessageDialog(null,"<html><font color=#0066ff> <u> <br> Java Swing Application </br> </u> </font> \n"
+                JOptionPane.showMessageDialog(null,"<html><font color=#0066ff> <u> <br> Java Swing Application </br> </u> </font> </html>\n"
                         + "<html><font color=#0066ff><u> <br> Java</br></u>: </font>  1.8.0_111 </html> \n"
                         + "<html><font color=#0066ff> <u> <br> IDE</br></u>: </font>  Apache Netbeans IDE 12.0 </html>\n"
                         + "<html><font color=#0066ff><u> <br> Icons</br></u>: </font>  www.flaticon.com </html>","About This Project",JOptionPane.INFORMATION_MESSAGE);     
@@ -1196,12 +1212,14 @@ repaint();
         
         else if(Event.getSource() == payByCreditCard_button)
         {
-            payByCreditCard(0);
+            payment.dispose();
+            System.out.println(current_operation);
         }
         
         else if(Event.getSource() == payByCash_button)
         {
-            payByCash(0);
+            payment.dispose();
+            System.out.println(current_operation);
         }
 }
 
