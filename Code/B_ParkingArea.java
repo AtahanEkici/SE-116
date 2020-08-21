@@ -34,6 +34,6 @@ public class B_ParkingArea extends Park_Area
       {
          double park_fee_brut = (this.get_fee() / 7200); // get the parking fee of the park area //
         int time_spent = 7200 - second; // get the number of seconds it spent on the parking spot //
-        return (park_fee_brut * time_spent);
+       return (park_fee_brut * time_spent);
       }
 }

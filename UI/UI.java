@@ -37,14 +37,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import Code.*;
 import static Code.Utilities.SHA_256;
 import static Code.Utilities.getCurrentTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Interface.Interface_Container;
 
 /**
  *
  * @author Atahan Ekici
  */
-public final class UI extends JFrame implements ActionListener , MouseListener 
+public final class UI extends JFrame implements ActionListener , MouseListener , Interface_Container
 {    
     private static UI single_instance = null;
     
@@ -63,6 +62,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         {
             Construct_Main_Frame();
             Construct_Parking_slots();
+            //Construct_Payment_Frame();
         }
         catch(Exception e)
         {
@@ -75,8 +75,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
     public static final Color PALE_BLACK = new Color(33, 37, 41);
     
     // ------------------------------------- Swing Components ------------------------------------- //
-    JFrame main,park;
-    JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button;
+    JFrame main,park,payment;
+    JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
     JTextArea jta;
     JMenuBar mb;
     JMenu fileMenu,aboutMenu;
@@ -90,6 +90,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
     
     Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
     String key1,key2,key3,key4,key5,key6,key7,key8,key9;
+    int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
     
     A_ParkingArea a1 = new A_ParkingArea();
     A_ParkingArea a2 = new A_ParkingArea();
@@ -102,7 +103,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener
     C_ParkingArea c1 = new C_ParkingArea();
     C_ParkingArea c2 = new C_ParkingArea();
     C_ParkingArea c3 = new C_ParkingArea();
-    
     
     public void Construct_Main_Frame()       
     {
@@ -206,10 +206,41 @@ public final class UI extends JFrame implements ActionListener , MouseListener
         main.setVisible(true);        
     }
     
+        public void Construct_Payment_Frame()
+    {
+        payment = new JFrame("Payment Menu");
+        payment.setIconImage(new ImageIcon("Icons/money.png").getImage());
+        payment.setLayout(new GridLayout());
+        payment.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        payment.setSize(500, 250);
+        payment.getContentPane().setBackground(PALE_BLACK);
+        
+        JPanel tutucu = new JPanel();
+        tutucu.setLayout(new GridLayout());
+        tutucu.setBackground(PALE_BLACK);
+        
+        payByCash_button = new JButton("Pay By Cash");
+        payByCash_button.setFocusable(false);
+        payByCash_button.setBackground(PALE_BLACK);
+        payByCash_button.setForeground(Color.WHITE);
+        payByCash_button.addActionListener(this);
+        
+        payByCreditCard_button = new JButton("Pay by Card");
+        payByCreditCard_button.setFocusable(false);
+        payByCreditCard_button.setBackground(PALE_BLACK);
+        payByCreditCard_button.setForeground(Color.WHITE);
+        payByCreditCard_button.addActionListener(this);
+                
+        tutucu.add(payByCash_button);
+        tutucu.add(payByCreditCard_button);
+        
+        payment.add(tutucu);
+        payment.setLocationRelativeTo(null);
+    }
+        
     public void Construct_Parking_slots()
     {
         park = new JFrame("Park Menu");
-        park.getContentPane().setBackground(PALE_BLACK);
         park.setIconImage(new ImageIcon("Icons/park.png").getImage());
         park.setLayout(new BorderLayout());
         park.setSize(500, 500);
@@ -367,6 +398,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                else
                {
                     JOptionPane.showMessageDialog(null,"Could not save ticket","ERROR!",JOptionPane.ERROR_MESSAGE);
+                    Save_To_File(text);
                }
     }
     
@@ -393,7 +425,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         stringBuilder.append(line);
                     }
                     content = stringBuilder.toString().trim();
-                    System.out.println("Content:"+content);
                 }              
 }catch(Exception e)
             {
@@ -441,11 +472,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park1_button.setText("Park_1(A)");
                         a1.set_Occupation(false);
                         timer1.stop();
+                        offset1 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset1 = i;
                         park1_button.setText("Park_1(A) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -473,11 +506,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park2_button.setText("Park_2(A)");
                         a2.set_Occupation(false);
                         timer2.stop();
+                        offset2 = 0;
                     }
                     
                     else
                     {
                         i--;    
+                        offset2 = i;
                         park2_button.setText("Park_2(A) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -505,11 +540,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park3_button.setText("Park_3(A)");
                         a3.set_Occupation(false);
                         timer3.stop();
+                        offset3 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset3 = i;
                         park3_button.setText("Park_3(A) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -537,11 +574,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park4_button.setText("Park_4(B)");
                         b1.set_Occupation(false);
                         timer4.stop();
+                        offset4 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset4 = i;
                         park4_button.setText("Park_4(B) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -569,11 +608,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park5_button.setText("Park_5(B)");
                         b2.set_Occupation(false);
                         timer5.stop();
+                        offset5 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset5 = i;
                         park5_button.setText("Park_5(B) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -601,11 +642,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park6_button.setText("Park_6(B)");
                         b3.set_Occupation(false);
                         timer6.stop();
+                        offset6 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset6 = i;
                         park6_button.setText("Park_6(B) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -633,11 +676,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park7_button.setText("Park_7(C)");
                         c1.set_Occupation(false);
                         timer7.stop();
+                        offset7 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset7 = i;
                         park7_button.setText("Park_7(C) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -665,11 +710,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park8_button.setText("Park_8(C)");
                         c2.set_Occupation(false);
                         timer8.stop();
+                        offset8 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset8 = i;
                         park8_button.setText("Park_8(C) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -697,11 +744,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                         park9_button.setText("Park_9(C)");
                         c3.set_Occupation(false);
                         timer9.stop();
+                        offset9 = 0;
                     }
                     
                     else
                     {
-                        i--;    
+                        i--;
+                        offset9 = i;
                         park9_button.setText("Park_9(C) : " +Utilities.calculateTime(i));
                     }
                 }
@@ -715,47 +764,47 @@ public final class UI extends JFrame implements ActionListener , MouseListener
             
             if(invoker == park1_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a1.get_parkingSlot()+"\n"+a1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot1: "+a1.get_parkingSlot()+"\n"+a1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park2_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a2.get_parkingSlot()+"\n"+a2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot2: "+a2.get_parkingSlot()+"\n"+a2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park3_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+a3.get_parkingSlot()+"\n"+a3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot3: "+a3.get_parkingSlot()+"\n"+a3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park4_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b1.get_parkingSlot()+"\n"+b1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot4: "+b1.get_parkingSlot()+"\n"+b1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park5_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b2.get_parkingSlot()+"\n"+b2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot5: "+b2.get_parkingSlot()+"\n"+b2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park6_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+b3.get_parkingSlot()+"\n"+b3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot6: "+b3.get_parkingSlot()+"\n"+b3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park7_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c1.get_parkingSlot()+"\n"+c1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot7: "+c1.get_parkingSlot()+"\n"+c1.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park8_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c2.get_parkingSlot()+"\n"+c2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot8: "+c2.get_parkingSlot()+"\n"+c2.toString()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park9_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot: "+c3.get_parkingSlot()+"\n"+c3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot9: "+c3.get_parkingSlot()+"\n"+c3.toString()+"","Properties",INFORMATION_MESSAGE);
             }
         }
         
@@ -775,7 +824,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key1))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a1.calculate_Discount(offset1)+"","Success", JOptionPane.PLAIN_MESSAGE);
                     timer1.stop();
                     park1_button.setEnabled(true);
                     park1_button.setText("Park_1(A)");
@@ -800,12 +849,12 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     String selected = Check_Key().trim();
                     
                     if(selected.equals(key2))
-                    {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    {   
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a2.calculate_Discount(offset2)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer2.stop();
-                    park2_button.setEnabled(true);
-                    park2_button.setText("Park_2(A)");
                     a2.set_Occupation(false);
+                    park2_button.setText("Park_2(A)");
+                    park2_button.setEnabled(true);
                     }
                     else
                     {
@@ -825,8 +874,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     String selected = Check_Key().trim();
                     
                     if(selected.equals(key3))
-                    {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    {   
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a3.calculate_Discount(offset3)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer3.stop();
                     park3_button.setEnabled(true);
                     park3_button.setText("Park_3(A)");
@@ -851,7 +900,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key4))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b1.calculate_Discount(offset4)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer4.stop();
                     park4_button.setEnabled(true);
                     park4_button.setText("Park_4(B)");
@@ -876,7 +925,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key5))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b2.calculate_Discount(offset5)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer5.stop();
                     park5_button.setEnabled(true);
                     park5_button.setText("Park_5(B)");
@@ -901,7 +950,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key6))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b3.calculate_Discount(offset6)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer6.stop();
                     park6_button.setEnabled(true);
                     park6_button.setText("Park_6(B)");
@@ -925,8 +974,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     String selected = Check_Key().trim();
                     
                     if(selected.equals(key7))
-                    {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    {    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c1.calculate_Discount(offset7)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer7.stop();
                     park7_button.setEnabled(true);
                     park7_button.setText("Park_7(C)");
@@ -951,7 +1000,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key8))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c2.calculate_Discount(offset8)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer8.stop();
                     park8_button.setEnabled(true);
                     park8_button.setText("Park_8(C)");
@@ -976,7 +1025,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener
                     
                     if(selected.equals(key9))
                     {
-                    JOptionPane.showMessageDialog(null,"Successful","Success", JOptionPane.PLAIN_MESSAGE);    
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c3.calculate_Discount(offset9)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer9.stop();
                     park9_button.setEnabled(true);
                     park9_button.setText("Park_9(C)");
@@ -1143,7 +1192,17 @@ repaint();
                 counter++;
                 JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
             }
-        }     
+        }
+        
+        else if(Event.getSource() == payByCreditCard_button)
+        {
+            payByCreditCard(0);
+        }
+        
+        else if(Event.getSource() == payByCash_button)
+        {
+            payByCash(0);
+        }
 }
 
     @Override
@@ -1197,4 +1256,16 @@ repaint();
             jpm.show(me.getComponent(),me.getX(), me.getY());
         }
 }
+
+    @Override
+    public double payByCash(double Fee) 
+    {
+        return 0; // To Be Coded //
+    }
+
+    @Override
+    public double payByCreditCard(double Fee) 
+    {
+       return 0; // To Be Coded //
+    }
 }

@@ -24,8 +24,8 @@ int month = calendar.get(Calendar.MONTH);
 int day = calendar.get(Calendar.DAY_OF_MONTH);
 int hours = calendar.get(Calendar.HOUR_OF_DAY);
 int minutes = calendar.get(Calendar.MINUTE);
-int second = calendar.get(Calendar.SECOND);
-return String.format("%02d.%02d.%04d %02d:%02d:%02d",day,month,year,hours,minutes,second);
+int seconds = calendar.get(Calendar.SECOND);
+return String.format("%02d.%02d.%04d %02d:%02d:%02d",day,month,year,hours,minutes,seconds);
 }
     
 public static String calculateTime(int seconds)

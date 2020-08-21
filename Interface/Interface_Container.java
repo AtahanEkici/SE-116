@@ -6,6 +6,6 @@ package Interface;
  */
 public interface Interface_Container 
 {
-    public double payByCash(int Fee);  
-    public double payByCreditCard(int Fee);
+    public double payByCash(double Fee);  
+    public double payByCreditCard(double Fee);
 }
