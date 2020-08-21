@@ -1,11 +1,55 @@
 package Lab5;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Atahan Ekici
  */
 public class Test 
 {
+    public static void User_Input(Car[] cars)
+    {
+        Scanner scan;
+        
+        for(int i = 0; i<cars.length;i++)
+        {
+        System.out.println("Please Input ID:");
+        scan = new Scanner(System.in);
+        cars[i].set_carID(scan.nextInt());
+        
+        System.out.println("Please Input Brand:");
+        scan = new Scanner(System.in);
+        cars[i].set_brand(scan.nextLine());
+        
+        System.out.println("Please Input Model:");
+        scan = new Scanner(System.in);
+        cars[i].set_model(scan.nextLine());
+        
+        System.out.println("Please Input Top Speed:");
+        scan = new Scanner(System.in);
+        cars[i].set_topSpeed(scan.nextDouble());
+        
+        System.out.println("Please Input Price:");
+        scan = new Scanner(System.in);
+        cars[i].set_price(scan.nextDouble());
+        
+        System.out.println("Please Input Engine Volume:");
+        scan = new Scanner(System.in);
+        double volume = scan.nextDouble();
+        
+        System.out.println("Please Input Engine Displacement:");
+        scan = new Scanner(System.in);
+        int displacement = scan.nextInt();
+        
+        System.out.println("Please Input Engine Brand:");
+        scan = new Scanner(System.in);
+        String brand = scan.nextLine();
+        
+        cars[i].set_eng(volume, displacement, brand);
+        }
+    }
+    
     public static void main(String[] args)
     {
         final Car[] cars = new Car[3];
@@ -45,5 +89,9 @@ public class Test
         cars[0].printInfo(); 
         cars[1].printInfo();
         cars[2].printInfo();
+        
+        User_Input(cars);
+        
+        System.out.println("-------------AFTER USER INPUT-------------");
    }
 }
