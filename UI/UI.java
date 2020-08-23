@@ -1,8 +1,6 @@
 package UI;
 
-import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;import java.awt.Desktop;import java.awt.FlowLayout;import java.awt.GridLayout;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.MouseEvent;import java.awt.event.MouseListener;import java.io.BufferedReader;import java.io.BufferedWriter;import java.io.File;import java.io.FileReader;import java.io.FileWriter;import java.io.IOException;import java.net.URI;import java.util.Date;import javax.swing.BorderFactory;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFileChooser;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuBar;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import static javax.swing.JOptionPane.INFORMATION_MESSAGE;import javax.swing.JPanel;import javax.swing.JPopupMenu;import javax.swing.JScrollPane;import javax.swing.JTextArea;import javax.swing.Timer;import javax.swing.filechooser.FileNameExtensionFilter;import Code.*;import static Code.Utilities.SHA_256;import static Code.Utilities.getCurrentTime;import Interface.Interface_Container;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;import java.awt.Desktop;import java.awt.FlowLayout;import java.awt.GridLayout;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.MouseEvent;import java.awt.event.MouseListener;import java.io.BufferedReader;import java.io.BufferedWriter;import java.io.File;import java.io.FileReader;import java.io.FileWriter;import java.io.IOException;import java.net.URI;import java.util.Date;import javax.swing.BorderFactory;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFileChooser;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuBar;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import static javax.swing.JOptionPane.INFORMATION_MESSAGE;import javax.swing.JPanel;import javax.swing.JPopupMenu;import javax.swing.JScrollPane;import javax.swing.JTextArea;import javax.swing.Timer;import javax.swing.filechooser.FileNameExtensionFilter;import Code.*;import static Code.Utilities.SHA_256;import static Code.Utilities.getCurrentTime;import Interface.Interface_Container;import java.awt.Font;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.math.BigDecimal;import java.math.MathContext;import javax.swing.JLabel;import javax.swing.JTextField;
 
 /**
  *
@@ -40,9 +38,10 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     public static final Color PALE_BLACK = new Color(33, 37, 41);
     
     // ------------------------------------- Swing Components ------------------------------------- //
-    JFrame main,park,payment;
+    JFrame main,park,payment,cash,credit;
     JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
     JTextArea jta;
+    JTextField jtf1,jtf2;
     JMenuBar mb;
     JMenu fileMenu,aboutMenu;
     JMenuItem jm_read,jm_new,jm_about,jm_github; // Main Frame Menu Components //
@@ -73,10 +72,11 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     C_ParkingArea c2 = new C_ParkingArea();
     C_ParkingArea c3 = new C_ParkingArea();
     
-    public void Construct_Main_Frame()       
+    public void Construct_Main_Frame() throws IOException       
     {
+    
         main = new JFrame("SE116 Project - Main Frame");
-        main.setIconImage(new ImageIcon("Icons/icon.png").getImage());
+        main.setIconImage(new ImageIcon(getClass().getResource("/Icons/icon.png")).getImage());
         main.setLayout(new BorderLayout());
         main.setResizable(false);
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -175,10 +175,18 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         main.setVisible(true);        
     }
     
-        public void Construct_Payment_Frame()
+    public static double round(double value)
+        {
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.round(new MathContext(3));
+        value = bd.doubleValue();
+        return value;
+        }
+    
+        public void Construct_Payment_Frame() throws IOException
     {
         payment = new JFrame("Payment Menu");
-        payment.setIconImage(new ImageIcon("Icons/money.png").getImage());
+        payment.setIconImage(new ImageIcon(getClass().getResource("/Icons/park.png")).getImage());
         payment.setLayout(new GridLayout());
         payment.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         payment.setSize(500, 250);
@@ -215,11 +223,156 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         payment.add(tutucu);
         payment.setLocationRelativeTo(null);
     }
+         
         
-    public void Construct_Parking_slots()
+        public void Construct_PayByCash(double fee)
+        {
+        cash = new JFrame("Pay With Cash Menu");
+        cash.getContentPane().setBackground(PALE_BLACK);
+        cash.setLayout(null);
+        cash.setSize(300,300);
+        cash.setResizable(false);
+        cash.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        fee = round(fee);
+        
+        current_fee = fee;
+        
+        JLabel label = new JLabel("Your Fee is: "+fee+"");  
+        label.setBounds(60,50,250,100);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        JButton hundred = new JButton();  
+        hundred.setText("100 TL");
+        hundred.setBounds(30,200,72,30);
+        hundred.addActionListener((new ActionListener()
+        {  
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {  
+                current_fee = (100 - current_fee);
+                JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
+                cash.dispose();
+    }  
+    }));
+        
+        JButton fifty = new JButton();  
+        fifty.setText("50 TL");
+        fifty.setBounds(110,200,72,30);
+        fifty.addActionListener((new ActionListener()
+        {  
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {  
+             current_fee = (50 - current_fee);
+                JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
+                cash.dispose();
+    }  
+    }));
+        
+        JButton twenty = new JButton();  
+        twenty.setText("20 TL");
+        twenty.setBounds(190,200,72,30);
+        twenty.addActionListener((new ActionListener()
+        {  
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {  
+             current_fee = (20 - current_fee);
+             JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
+             cash.dispose();
+    }  
+    }));
+        
+        cash.add(label);
+        cash.add(hundred);
+        cash.add(fifty);
+        cash.add(twenty);
+        cash.setLocationRelativeTo(null);
+        }
+        
+        public void Construct_PayByCreditCard(double fee)
+        {
+        {
+        credit = new JFrame("Pay With Cash Menu");
+        credit.getContentPane().setBackground(PALE_BLACK);
+        credit.setLayout(null);
+        credit.setSize(300,300);
+        credit.setResizable(false);
+        credit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        fee = round(fee);
+        
+        current_fee = fee;
+        
+        JLabel label = new JLabel("Your Fee is: "+fee+"");  
+        label.setBounds(75,-15,250,100);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("Serif", Font.PLAIN, 20));
+        
+        JLabel label2 = new JLabel("Card Number: ");  
+        label2.setBounds(10,40,250,100);
+        label2.setForeground(Color.WHITE);
+        
+        JTextField cardText = new JTextField("",11);  
+        cardText.setBounds(90,82,150,20);  
+        
+        JTextField cvc = new JTextField("",3);  
+        cvc.setBounds(90,120,30,20);
+        
+        JLabel label3 = new JLabel("CVC:");  
+        label3.setBounds(60,80,250,100);
+        label3.setForeground(Color.WHITE);
+        
+        JButton hundred = new JButton();  
+        hundred.setText("OK");
+        hundred.setBounds(120,200,55,40);
+        hundred.setFocusable(false);
+        hundred.addActionListener((new ActionListener()
+        {  
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {  
+            String card_number = cardText.getText();
+            String CVC = cvc.getText();
+            
+            if(card_number.length() != 11)
+            {
+                JOptionPane.showMessageDialog( null, "Wrong Card Number Lenght"
+                        + "(It should be 11)", "ERROR!", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(CVC.length() != 3)
+            {
+                JOptionPane.showMessageDialog( null, "Wrong CVC Number Lenght"
+                        + "(It should be 3)", "ERROR!", JOptionPane.ERROR_MESSAGE);
+            }
+            else if(card_number.length() == 11 && CVC.length() == 3)
+            {
+                JOptionPane.showMessageDialog( null, "Thank you for your visit", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
+                credit.dispose();
+            }
+            else
+            {
+                actionPerformed(e);
+            }
+    }  
+    }));
+        
+        credit.add(label);
+        credit.add(label2);
+        credit.add(label3);
+        credit.add(cardText);
+        credit.add(cvc);
+        credit.add(hundred);
+        credit.setLocationRelativeTo(null);
+        }
+        }
+        
+    public void Construct_Parking_slots() throws IOException 
     {
         park = new JFrame("Park Menu");
-        park.setIconImage(new ImageIcon("Icons/park.png").getImage());
+        park.setIconImage(new ImageIcon(getClass().getResource("/Icons/park.png")).getImage());
         park.setLayout(new BorderLayout());
         park.setSize(500, 500);
         park.setResizable(true);
@@ -230,14 +383,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         pop_properties = new JMenuItem("Properties");
         pop_properties.addActionListener(this);
         
-        pop_stop_timer = new JMenuItem("Stop Timer");
+        pop_stop_timer = new JMenuItem("Disembark");
         pop_stop_timer.addActionListener(this);
         
         jpm.add(pop_stop_timer);
         jpm.add(pop_properties);
         
         jpm.addMouseListener(this);
-        
         
         JPanel button_holder = new JPanel();
         button_holder.setLayout(new GridLayout(3,3));
@@ -343,8 +495,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     public void refresh()
     {
         main.setVisible(false);
-        main.dispose();
-            
+        main.dispose();    
         main.repaint();
         main.revalidate();
         main.setVisible(true);
@@ -358,7 +509,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     } 
     else 
     {
-      JOptionPane.showMessageDialog( null, "Could not delete the ticket", "ERROR!", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog( null, "Could not delete the file", "ERROR!", JOptionPane.ERROR_MESSAGE);
     } 
     }
     
@@ -814,13 +965,13 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     if(selected.equals(key1))
                     {
                     current_fee = a1.calculate_Discount(offset1);
+                    current_operation = 1;
+                    payment.setVisible(true);
+                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a1.calculate_Discount(offset1)+"","Success", JOptionPane.PLAIN_MESSAGE); 
                     timer1.stop();
-                    JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a1.calculate_Discount(offset1)+"","Success", JOptionPane.INFORMATION_MESSAGE);
                     park1_button.setEnabled(true);
                     park1_button.setText("Park_1(A)");
                     a1.set_Occupation(false);
-                    current_operation = 1;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -842,14 +993,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key2))
                     {
-                    current_fee = a2.calculate_Discount(offset2);    
+                    current_fee = a2.calculate_Discount(offset2); 
+                    current_operation = 2;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a2.calculate_Discount(offset2)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer2.stop();
                     a2.set_Occupation(false);
                     park2_button.setText("Park_2(A)");
                     park2_button.setEnabled(true);
-                    current_operation = 2;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -870,14 +1021,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key3))
                     {   
-                    current_fee = a3.calculate_Discount(offset3);    
+                    current_fee = a3.calculate_Discount(offset3);
+                    current_operation = 3;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+a3.calculate_Discount(offset3)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer3.stop();
                     park3_button.setEnabled(true);
                     park3_button.setText("Park_3(A)");
                     a3.set_Occupation(false);
-                    current_operation = 3;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -898,14 +1049,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key4))
                     {
-                    current_fee = b1.calculate_Discount(offset4);    
+                    current_fee = b1.calculate_Discount(offset4);  
+                    current_operation = 4;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b1.calculate_Discount(offset4)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer4.stop();
                     park4_button.setEnabled(true);
                     park4_button.setText("Park_4(B)");
                     b1.set_Occupation(false);
-                    current_operation = 4;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -926,14 +1077,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key5))
                     {
-                    current_fee = b2.calculate_Discount(offset5);    
+                    current_fee = b2.calculate_Discount(offset5); 
+                    current_operation = 5;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b2.calculate_Discount(offset5)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer5.stop();
                     park5_button.setEnabled(true);
                     park5_button.setText("Park_5(B)");
                     b2.set_Occupation(false);
-                    current_operation = 5;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -954,14 +1105,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key6))
                     {
-                    current_fee = b3.calculate_Discount(offset6);    
+                    current_fee = b3.calculate_Discount(offset6);
+                    current_operation = 6;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+b3.calculate_Discount(offset6)+"","Success", JOptionPane.PLAIN_MESSAGE);     
                     timer6.stop();
                     park6_button.setEnabled(true);
                     park6_button.setText("Park_6(B)");
                     b3.set_Occupation(false);
-                    current_operation = 6;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -982,14 +1133,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key7))
                     {
-                    current_fee = c1.calculate_Discount(offset7);    
+                    current_fee = c1.calculate_Discount(offset7);  
+                    current_operation = 7;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c1.calculate_Discount(offset7)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer7.stop();
                     park7_button.setEnabled(true);
                     park7_button.setText("Park_7(C)");
                     c1.set_Occupation(false);
-                    current_operation = 7;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1010,14 +1161,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key8))
                     {
-                    current_fee = c2.calculate_Discount(offset8);    
+                    current_fee = c2.calculate_Discount(offset8);   
+                    current_operation = 8;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c2.calculate_Discount(offset8)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer8.stop();
                     park8_button.setEnabled(true);
                     park8_button.setText("Park_8(C)");
                     c2.set_Occupation(false);
-                    current_operation = 8;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1038,14 +1189,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                     
                     if(selected.equals(key9))
                     {
-                    current_fee = c3.calculate_Discount(offset9);    
+                    current_fee = c3.calculate_Discount(offset9); 
+                    current_operation = 9;
+                    payment.setVisible(true);
                     JOptionPane.showMessageDialog(null,"Fee for embarking is: "+c3.calculate_Discount(offset9)+"","Success", JOptionPane.PLAIN_MESSAGE);    
                     timer9.stop();
                     park9_button.setEnabled(true);
                     park9_button.setText("Park_9(C)");
                     c3.set_Occupation(false);
-                    current_operation = 9;
-                    payment.setVisible(true);
                     }
                     else
                     {
@@ -1213,13 +1364,14 @@ repaint();
         else if(Event.getSource() == payByCreditCard_button)
         {
             payment.dispose();
-            System.out.println(current_operation);
+            payByCreditCard(current_fee);
+            
         }
         
         else if(Event.getSource() == payByCash_button)
         {
             payment.dispose();
-            System.out.println(current_operation);
+            payByCash(current_fee);
         }
 }
 
@@ -1276,14 +1428,16 @@ repaint();
 }
 
     @Override
-    public double payByCash(double Fee) 
-    {
-        return 0; // To Be Coded //
+    public void payByCash(double Fee) 
+    { 
+       Construct_PayByCash(Fee);
+       cash.setVisible(true);
     }
 
     @Override
-    public double payByCreditCard(double Fee) 
+    public void payByCreditCard(double Fee) 
     {
-       return 0; // To Be Coded //
+        Construct_PayByCreditCard(Fee);
+        credit.setVisible(true);
     }
 }
