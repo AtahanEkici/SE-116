@@ -1,16 +1,14 @@
-package UI;
-
-import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;import java.awt.Desktop;import java.awt.FlowLayout;import java.awt.GridLayout;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.MouseEvent;import java.awt.event.MouseListener;import java.io.BufferedReader;import java.io.BufferedWriter;import java.io.File;import java.io.FileReader;import java.io.FileWriter;import java.io.IOException;import java.net.URI;import java.util.Date;import javax.swing.BorderFactory;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFileChooser;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuBar;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import static javax.swing.JOptionPane.INFORMATION_MESSAGE;import javax.swing.JPanel;import javax.swing.JPopupMenu;import javax.swing.JScrollPane;import javax.swing.JTextArea;import javax.swing.Timer;import javax.swing.filechooser.FileNameExtensionFilter;import Code.*;import static Code.Utilities.SHA_256;import static Code.Utilities.getCurrentTime;import Interface.Interface_Container;import java.awt.Font;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.math.BigDecimal;import java.math.MathContext;import javax.swing.JLabel;import javax.swing.JTextField;
-
+ package UI;
+import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;import java.awt.Desktop;import java.awt.FlowLayout;import java.awt.GridLayout;import java.awt.event.ActionEvent;import java.awt.event.ActionListener;import java.awt.event.MouseEvent;import java.awt.event.MouseListener;import java.io.BufferedReader;import java.io.BufferedWriter;import java.io.File;import java.io.FileReader;import java.io.FileWriter;import java.io.IOException;import java.net.URI;import java.util.Date;import javax.swing.BorderFactory;import javax.swing.ImageIcon;import javax.swing.JButton;import javax.swing.JFileChooser;import javax.swing.JFrame;import javax.swing.JMenu;import javax.swing.JMenuBar;import javax.swing.JMenuItem;import javax.swing.JOptionPane;import static javax.swing.JOptionPane.INFORMATION_MESSAGE;import javax.swing.JPanel;import javax.swing.JPopupMenu;import javax.swing.JScrollPane;import javax.swing.JTextArea;import javax.swing.Timer;import javax.swing.filechooser.FileNameExtensionFilter;import Code.*;import static Code.Utilities.SHA_256;import static Code.Utilities.getCurrentTime;import Interface.Interface_Container;import java.awt.Font;import java.awt.event.KeyEvent;import java.awt.event.KeyListener;import java.awt.event.WindowAdapter;import java.awt.event.WindowEvent;import java.math.BigDecimal;import java.math.MathContext;import javax.swing.JLabel;import javax.swing.JTextField;
 /**
  *
  * @author Atahan Ekici
  */
-public final class UI extends JFrame implements ActionListener , MouseListener , Interface_Container
+public final class UI extends JFrame implements ActionListener , MouseListener , Interface_Container , KeyListener
 {    
     private static UI single_instance = null;
     
-        public static UI getInstance() // Singleton Pattern so that only one frame will open //
+    public static UI getInstance() // Singleton Pattern so that only one frame will open //
     {
         if(single_instance == null)
         {
@@ -33,65 +31,69 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         }   
     } 
     
-    public int counter = 1;  
+    protected int counter = 1;  
 
-    public static final Color PALE_BLACK = new Color(33, 37, 41);
+    protected static final Color PALE_BLACK = new Color(33, 37, 41);
     
     // ------------------------------------- Swing Components ------------------------------------- //
-    JFrame main,park,payment,cash,credit;
-    JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
-    JTextArea jta;
-    JTextField jtf1,jtf2;
-    JMenuBar mb;
-    JMenu fileMenu,aboutMenu;
-    JMenuItem jm_read,jm_new,jm_about,jm_github; // Main Frame Menu Components //
-    JMenuItem pop_properties , pop_stop_timer; // Pop-Up Menu Components //
-    JScrollPane jsp;
-    JOptionPane jop;
-    JPopupMenu jpm;
-    Component invoker;
+    protected JFrame main,park,payment,cash,credit;
+    protected JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
+    protected JTextArea jta;
+    protected JTextField jtf1,jtf2;
+    protected JMenuBar mb;
+    protected JMenu fileMenu,aboutMenu;
+    protected JMenuItem jm_read,jm_new,jm_about,jm_github; // Main Frame Menu Components //
+    protected JMenuItem pop_properties , pop_stop_timer; // Pop-Up Menu Components //
+    protected JScrollPane jsp;
+    protected JOptionPane jop;
+    protected JPopupMenu jpm;
+    protected Component invoker;
     // ------------------------------------- Swing Components ------------------------------------- //
     
-    Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
-    String key1,key2,key3,key4,key5,key6,key7,key8,key9;
-    int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
-    File file1,file2,file3,file4,file5,file6,file7,fiile8,file9;
+    protected Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
+    protected String key1,key2,key3,key4,key5,key6,key7,key8,key9;
+    protected int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
     
-    int current_operation;
-    double current_fee;
+    protected int current_operation;
+    protected double current_fee;
     
-    A_ParkingArea a1 = new A_ParkingArea();
-    A_ParkingArea a2 = new A_ParkingArea();
-    A_ParkingArea a3 = new A_ParkingArea();
+    protected static A_ParkingArea a1 = new A_ParkingArea();
+    protected static A_ParkingArea a2 = new A_ParkingArea();
+    protected static A_ParkingArea a3 = new A_ParkingArea();
     
-    B_ParkingArea b1 = new B_ParkingArea();
-    B_ParkingArea b2 = new B_ParkingArea();
-    B_ParkingArea b3 = new B_ParkingArea();
+    protected static B_ParkingArea b1 = new B_ParkingArea();
+    protected static B_ParkingArea b2 = new B_ParkingArea();
+    protected static B_ParkingArea b3 = new B_ParkingArea();
     
-    C_ParkingArea c1 = new C_ParkingArea();
-    C_ParkingArea c2 = new C_ParkingArea();
-    C_ParkingArea c3 = new C_ParkingArea();
+    protected static C_ParkingArea c1 = new C_ParkingArea();
+    protected static C_ParkingArea c2 = new C_ParkingArea();
+    protected static C_ParkingArea c3 = new C_ParkingArea();
     
-    public void Construct_Main_Frame() throws IOException       
+    private void Construct_Main_Frame() throws IOException     // Constructs the Main Frame //  
     {
     
         main = new JFrame("SE116 Project - Main Frame");
-        main.setIconImage(new ImageIcon(getClass().getResource("/Icons/icon.png")).getImage());
+        ImageIcon image = new ImageIcon(getClass().getResource("/Icons/icon.png"));
+        main.setIconImage(image.getImage());
         main.setLayout(new BorderLayout());
         main.setResizable(false);
         main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        main.addKeyListener(this);
         
         JPanel tutucu = new JPanel();
         tutucu.setLayout(new FlowLayout());
         tutucu.setBackground(PALE_BLACK);
+        tutucu.addKeyListener(this);
         
         JPanel textArea = new JPanel();
         textArea.setLayout(new FlowLayout(FlowLayout.CENTER));
         textArea.setBackground(Color.BLACK);
+        textArea.addKeyListener(this);
         
         mb = new JMenuBar();
         main.setJMenuBar(mb);      
         mb.setBorder(BorderFactory.createLineBorder(PALE_BLACK));
+        mb.addKeyListener(this);
         
         // Clear_Button Tanımı Başlangıç //
         clear_button = new JButton("Clear");
@@ -152,6 +154,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setBorder(null);
+        jsp.addKeyListener(this);
         
         jsp.getVerticalScrollBar().setBackground(PALE_BLACK);
         jsp.getHorizontalScrollBar().setBackground(PALE_BLACK);
@@ -160,6 +163,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         jta.setForeground(Color.WHITE);
         jta.setBackground(Color.BLACK);
         jta.setEditable(false);
+        jta.addKeyListener(this);
         
         jsp.getViewport().add(jta);
         add(jsp);
@@ -169,13 +173,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
   
         main.add(textArea,BorderLayout.PAGE_END); // Text'leri tutan panelin JFrame'e iliştirilmesi //
         main.add(tutucu,BorderLayout.NORTH); // Butonları tutan panelin Ana Frame'e eklenmesi //
-        
+        main.getContentPane().addKeyListener(this);
         main.pack(); // Function that packs the frame and cuts the unnecessary lines //
         main.setLocationRelativeTo(null); // initially start the frame at the center of the screen //
         main.setVisible(true);        
+        main.setAutoRequestFocus(true);
+        main.getContentPane().requestFocus();
     }
     
-    public static double round(double value)
+    private static double round(double value) // Rounds given presicion integer into 3 significant figures //
         {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.round(new MathContext(3));
@@ -183,10 +189,11 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         return value;
         }
     
-        public void Construct_Payment_Frame() throws IOException
+    private void Construct_Payment_Frame() throws IOException // Constructs Payment Frame //
     {
         payment = new JFrame("Payment Menu");
-        payment.setIconImage(new ImageIcon(getClass().getResource("/Icons/park.png")).getImage());
+        ImageIcon image = new ImageIcon(getClass().getResource("/Icons/money.png"));
+        payment.setIconImage(image.getImage());
         payment.setLayout(new GridLayout());
         payment.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         payment.setSize(500, 250);
@@ -225,7 +232,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     }
          
         
-        public void Construct_PayByCash(double fee)
+    private void Construct_PayByCash(double fee)
         {
         cash = new JFrame("Pay With Cash Menu");
         cash.getContentPane().setBackground(PALE_BLACK);
@@ -256,6 +263,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 cash.dispose();
     }  
     }));
+        
+        cash.addWindowListener(new WindowAdapter() 
+{
+    @Override
+    public void windowClosing(WindowEvent e) 
+    {
+        JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+});
         
         JButton fifty = new JButton();  
         fifty.setText("50 TL");
@@ -292,7 +308,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         cash.setLocationRelativeTo(null);
         }
         
-        public void Construct_PayByCreditCard(double fee)
+    private void Construct_PayByCreditCard(double fee)
         {
         {
         credit = new JFrame("Pay With Cash Menu");
@@ -359,6 +375,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     }  
     }));
         
+        credit.addWindowListener(new WindowAdapter() 
+{
+    @Override
+    public void windowClosing(WindowEvent e) 
+    {
+        JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
+    }
+});
+        
         credit.add(label);
         credit.add(label2);
         credit.add(label3);
@@ -369,10 +394,11 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         }
         }
         
-    public void Construct_Parking_slots() throws IOException 
+    private void Construct_Parking_slots() throws IOException 
     {
         park = new JFrame("Park Menu");
-        park.setIconImage(new ImageIcon(getClass().getResource("/Icons/park.png")).getImage());
+        ImageIcon image = new ImageIcon(getClass().getResource("/Icons/park.png"));
+        park.setIconImage(image.getImage());
         park.setLayout(new BorderLayout());
         park.setSize(500, 500);
         park.setResizable(true);
@@ -492,16 +518,19 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         park.add(button_holder);
     }
     
-    public void refresh()
+    private void refresh() // Refreshes the Main Frame in case of Failure on drawing bounds of the frame //
     {
-        main.setVisible(false);
-        main.dispose();    
+        jta.append(""+counter+")Frame Refreshed\n\n");
+        counter++;
+        main.setVisible(false);   
         main.repaint();
         main.revalidate();
         main.setVisible(true);
+        main.setAutoRequestFocus(true);
+        jta.requestFocus();
     }
     
-    public void deleteFile(File file)
+    private void deleteFile(File file) // Deletes the given file //
     {
     if (file.delete())
     { 
@@ -513,7 +542,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     } 
     }
     
-    public void Save_To_File(String text)
+    private void Save_To_File(String text)
     {
                BufferedWriter writer;
                JFileChooser jfc;
@@ -543,7 +572,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                }
     }
     
-    public String Check_Key()
+    private String Check_Key()
     {
         String content = null;
         
@@ -608,6 +637,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = a1.calculate_Discount(offset1);
+                        current_operation = 1;
+                        payment.setVisible(true);
                         park1_button.setEnabled(true);
                         park1_button.setText("Park_1(A)");
                         a1.set_Occupation(false);
@@ -642,6 +674,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = a2.calculate_Discount(offset1);
+                        current_operation = 2;
+                        payment.setVisible(true);
                         park2_button.setEnabled(true);
                         park2_button.setText("Park_2(A)");
                         a2.set_Occupation(false);
@@ -676,6 +711,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = a3.calculate_Discount(offset1);
+                        current_operation = 3;
+                        payment.setVisible(true);
                         park3_button.setEnabled(true);
                         park3_button.setText("Park_3(A)");
                         a3.set_Occupation(false);
@@ -710,6 +748,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = b1.calculate_Discount(offset1);
+                        current_operation = 4;
+                        payment.setVisible(true);
                         park4_button.setEnabled(true);
                         park4_button.setText("Park_4(B)");
                         b1.set_Occupation(false);
@@ -744,6 +785,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = b2.calculate_Discount(offset1);
+                        current_operation = 5;
+                        payment.setVisible(true);
                         park5_button.setEnabled(true);
                         park5_button.setText("Park_5(B)");
                         b2.set_Occupation(false);
@@ -778,6 +822,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = b3.calculate_Discount(offset1);
+                        current_operation = 6;
+                        payment.setVisible(true);
                         park6_button.setEnabled(true);
                         park6_button.setText("Park_6(B)");
                         b3.set_Occupation(false);
@@ -812,6 +859,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = c1.calculate_Discount(offset1);
+                        current_operation = 7;
+                        payment.setVisible(true);
                         park7_button.setEnabled(true);
                         park7_button.setText("Park_7(C)");
                         c1.set_Occupation(false);
@@ -846,6 +896,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = c2.calculate_Discount(offset1);
+                        current_operation = 8;
+                        payment.setVisible(true);
                         park8_button.setEnabled(true);
                         park8_button.setText("Park_8(C)");
                         c2.set_Occupation(false);
@@ -880,6 +933,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 {  
                     if(i == 0)
                     {
+                        current_fee = c3.calculate_Discount(offset1);
+                        current_operation = 9;
+                        payment.setVisible(true);
                         park9_button.setEnabled(true);
                         park9_button.setText("Park_9(C)");
                         c3.set_Occupation(false);
@@ -1440,4 +1496,16 @@ repaint();
         Construct_PayByCreditCard(Fee);
         credit.setVisible(true);
     }
+
+    @Override
+    public void keyPressed(KeyEvent e) 
+    {
+        if (e.getKeyCode()== KeyEvent.VK_F5)
+        {
+            refresh();
+        }    
+    }
+    
+@Override public void keyTyped(KeyEvent e){}
+@Override public void keyReleased(KeyEvent e){}
 }
