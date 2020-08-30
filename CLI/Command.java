@@ -1,5 +1,6 @@
 package CLI;
-import static CLI.Command.printOccupied;import Code.*;import Interface.*;import java.math.BigDecimal;
+import static CLI.Command.printOccupied;import static CLI.Command.stopTimer;
+import Code.*;import Interface.*;import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Scanner;import java.util.Timer;import java.util.TimerTask;
 /**
@@ -10,7 +11,6 @@ public class Command implements Interface_Container
 {
     public static Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
     static int number1,number2,number3,number4,number5,number6,number7,number8,number9;
-    double fee1,fee2,fee3,fee4,fee5,fee6,fee7,fee8,fee9;
     
     protected static A_ParkingArea a1 = new A_ParkingArea();
     protected static A_ParkingArea a2 = new A_ParkingArea();
@@ -27,8 +27,6 @@ public class Command implements Interface_Container
     protected static Thread scanner_Thread = new scannerThread();
     
     public static Command c = new Command();
-    
-    public static String a = null;
     
     public static final void begin()
     {
@@ -82,64 +80,153 @@ public class Command implements Interface_Container
     
     public static void printOccupied()
     {
+        String Occupations = null;
         
         if(a1.get_Occupation() == true)
         {
-            a += "A1";
+            Occupations += "A1";
         }
         if(a2.get_Occupation() == true)
         {
-            a += " A2";
+            Occupations += ",A2";
         }
          if(a3.get_Occupation() == true)
         {
-            a += " A3";
+            Occupations += ",A3";
         }
          
          if(b1.get_Occupation() == true)
         {
-            a += " B1";
+            Occupations += ",B1";
         }
          if(b2.get_Occupation() == true)
         {
-            a += " B2";
+            Occupations += ",B2";
         }
          if(b3.get_Occupation() == true)
         {
-            a += " B3";
+            Occupations += ",B3";
         }
          
          if(c1.get_Occupation() == true)
         {
-            a += " C1";
+            Occupations += ",C1";
         }
          if(c2.get_Occupation() == true)
         {
-            a += " C2";
+            Occupations += ",C2";
         }
          if(c3.get_Occupation() == true)
         {
-            a += " C3";
+            Occupations += ",C3";
         }
          
          
-         if(a == null)
+         if(Occupations == null)
          {
             System.out.println("No parking slot is occupied for the moment");
          }
          else  
          {
-            a = a.replaceFirst("null", "");
-            System.out.println(a);
+            Occupations = Occupations.replaceAll("null", "");
+            System.out.println(Occupations);
          } 
+    }
+    
+    
+    public static void stopTimer(int i)
+    {
+        switch (i) 
+        {
+            case 1:
+                Command.c.paymentMenu(Command.a1.calculate_Discount(Command.number1));
+                Command.timer1.cancel();
+                Command.a1.set_Occupation(false);
+                break;
+                
+            case 2:
+                Command.c.paymentMenu(Command.a2.calculate_Discount(Command.number1));
+                Command.timer2.cancel();
+                Command.a2.set_Occupation(false);
+                break;
+                
+            case 3:
+                Command.c.paymentMenu(Command.a3.calculate_Discount(Command.number1));
+                Command.timer3.cancel();
+                Command.a3.set_Occupation(false);
+                break;
+                
+            case 4:
+                Command.c.paymentMenu(Command.b1.calculate_Discount(Command.number1));
+                Command.timer4.cancel();
+                Command.b1.set_Occupation(false);
+                break;
+                
+            case 5:
+                Command.c.paymentMenu(Command.b2.calculate_Discount(Command.number1));
+                Command.timer5.cancel();
+                Command.b2.set_Occupation(false);
+                break;
+                
+            case 6:
+                Command.c.paymentMenu(Command.b3.calculate_Discount(Command.number1));
+                Command.timer6.cancel();
+                Command.b3.set_Occupation(false);
+                break;
+                
+            case 7:
+                Command.c.paymentMenu(Command.c1.calculate_Discount(Command.number1));
+                Command.timer7.cancel();
+                Command.c1.set_Occupation(false);
+                break;
+                
+            case 8:
+                Command.c.paymentMenu(Command.c2.calculate_Discount(Command.number1));
+                Command.timer8.cancel();
+                Command.c2.set_Occupation(false);
+                break;
+                
+            case 9:
+                Command.c.paymentMenu(Command.c3.calculate_Discount(Command.number1));
+                Command.timer9.cancel();
+                Command.c3.set_Occupation(false);
+                break;
+                
+            default:
+                System.out.println("\n ------Hata------ \n");
+                break;
+        }
     }
     
     public static final void start_Timer1()
     {
         if(a1.get_Occupation() == true)
         {
-            System.out.print("Already Occupied => ");
-            System.out.println(Code.Utilities.calculateTime(number1)+"\n");
+            System.out.print("Already Occupied => "); System.out.println(Code.Utilities.calculateTime(number1)+"\n"); 
+            
+            System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(1);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -147,7 +234,6 @@ public class Command implements Interface_Container
             timer1 = new Timer(); 
             TimerTask task1 = new Helper1();  
             timer1.schedule(task1, 0, 1000); 
-            a1.set_Occupation(true);
         }
     
     }
@@ -158,6 +244,30 @@ public class Command implements Interface_Container
         {
           System.out.print("Already Occupied => ");
           System.out.println(Code.Utilities.calculateTime(number2)+"\n");  
+          
+          System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(2);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -165,7 +275,6 @@ public class Command implements Interface_Container
     timer2 = new Timer(); 
     TimerTask task1 = new Helper2();  
     timer2.schedule(task1, 0, 1000); 
-    a2.set_Occupation(true);
         }
     }
         
@@ -175,6 +284,30 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
             System.out.println(Code.Utilities.calculateTime(number3)+"\n");
+            
+            System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(3);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -182,7 +315,6 @@ public class Command implements Interface_Container
     timer3 = new Timer(); 
     TimerTask task1 = new Helper3();  
     timer3.schedule(task1, 0, 1000);
-    a3.set_Occupation(true);
         }
     }
     
@@ -192,6 +324,30 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
             System.out.println(Code.Utilities.calculateTime(number4)+"\n");
+            
+            System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(4);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -199,7 +355,6 @@ public class Command implements Interface_Container
     timer4 = new Timer(); 
     TimerTask task1 = new Helper4();  
     timer4.schedule(task1, 0, 1000); 
-    b1.set_Occupation(true);
         }
     
     }           
@@ -210,6 +365,30 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
             System.out.println(Code.Utilities.calculateTime(number5)+"\n");
+            
+            System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(5);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -217,7 +396,6 @@ public class Command implements Interface_Container
     timer5 = new Timer(); 
     TimerTask task1 = new Helper5();  
     timer5.schedule(task1, 0, 1000); 
-    b2.set_Occupation(true);
         }
     }
                     
@@ -227,6 +405,30 @@ public class Command implements Interface_Container
         {
            System.out.print("Already Occupied => ");
            System.out.println(Code.Utilities.calculateTime(number6)+"\n"); 
+           
+           System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(6);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -234,7 +436,6 @@ public class Command implements Interface_Container
     timer6 = new Timer(); 
     TimerTask task1 = new Helper6();  
     timer6.schedule(task1, 0, 1000); 
-    b3.set_Occupation(true);
         }
     }                     
                         
@@ -244,14 +445,37 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
            System.out.println(Code.Utilities.calculateTime(number7)+"\n"); 
+           
+           System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(7);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
     a1.set_Occupation(true);
     timer7 = new Timer(); 
     TimerTask task1 = new Helper7();  
-    timer7.schedule(task1, 0, 1000); 
-    c1.set_Occupation(true);   
+    timer7.schedule(task1, 0, 1000);   
         }
     }
     
@@ -261,6 +485,30 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
            System.out.println(Code.Utilities.calculateTime(number8)+"\n"); 
+           
+           System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(8);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -268,7 +516,6 @@ public class Command implements Interface_Container
     timer8 = new Timer(); 
     TimerTask task1 = new Helper8();  
     timer8.schedule(task1, 0, 1000); 
-    c2.set_Occupation(true);
         }
     }
     
@@ -278,6 +525,30 @@ public class Command implements Interface_Container
         {
             System.out.print("Already Occupied => ");
            System.out.println(Code.Utilities.calculateTime(number9)+"\n"); 
+           
+           System.out.println("Input 1 for disembark\nInput 2 for Main Menu");
+            Scanner scan = new Scanner(System.in);
+            
+            while(scan.hasNextInt() == false)
+            {
+                System.out.println("Wrong Input!");
+            }
+            
+            int result = scan.nextInt();
+            
+            switch (result) 
+            {
+                case 1:
+                    stopTimer(9);
+                    break;
+                    
+                case 2:
+                    break;
+                    
+                default:
+                    System.out.println("Hata");
+                    break;
+            }
         }
         else
         {
@@ -285,7 +556,6 @@ public class Command implements Interface_Container
     timer9 = new Timer(); 
     TimerTask task1 = new Helper9();  
     timer9.schedule(task1, 0, 1000); 
-    c3.set_Occupation(true);
         }
     }
     
@@ -368,8 +638,6 @@ public class Command implements Interface_Container
         scanned = new Scanner(System.in);
         CVC = scanned.nextLine();
         }
-        
-        scanned.close();
         System.out.println("Your payment has been confirmed. Thank you.");
     }
 }
@@ -461,9 +729,7 @@ class Helper1 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.a1.calculate_Discount(Command.number1));
-        Command.timer1.cancel();
-        Command.a1.set_Occupation(false);
+        stopTimer(1);
         }
         else
         {
@@ -484,9 +750,7 @@ class Helper2 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.a2.calculate_Discount(Command.number2));
-        Command.timer2.cancel();
-        Command.a2.set_Occupation(false);
+        stopTimer(2);
         }
         else
         {
@@ -509,9 +773,7 @@ class Helper3 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.a3.calculate_Discount(Command.number3));    
-        Command.timer3.cancel();
-        Command.a3.set_Occupation(false);
+        stopTimer(3);
         }
         else
         {
@@ -534,9 +796,7 @@ class Helper4 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.b1.calculate_Discount(Command.number4));    
-        Command.timer4.cancel();
-        Command.b1.set_Occupation(false);
+        stopTimer(4);
         }
         else
         {
@@ -558,9 +818,7 @@ class Helper5 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.b2.calculate_Discount(Command.number5));    
-        Command.timer5.cancel();
-        Command.b2.set_Occupation(false);
+        stopTimer(5);
         }
         else
         {
@@ -582,9 +840,7 @@ class Helper6 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.b3.calculate_Discount(Command.number6));    
-        Command.timer6.cancel();
-        Command.b3.set_Occupation(false);
+        stopTimer(6);
         }
         else
         {
@@ -606,9 +862,7 @@ class Helper7 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.c1.calculate_Discount(Command.number7));    
-        Command.timer7.cancel();
-        Command.c1.set_Occupation(false);
+         stopTimer(7);
         }
         else
         {
@@ -629,9 +883,7 @@ class Helper8 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.c2.calculate_Discount(Command.number8));    
-        Command.timer8.cancel();
-        Command.c2.set_Occupation(false);
+        stopTimer(8);
         }
         else
         {
@@ -653,9 +905,7 @@ class Helper9 extends TimerTask
     { 
         if(i <= 0)
         {
-        Command.c.paymentMenu(Command.c3.calculate_Discount(Command.number9));    
-        Command.timer9.cancel();
-        Command.c3.set_Occupation(false);
+        stopTimer(9);
         }
         else
         {
