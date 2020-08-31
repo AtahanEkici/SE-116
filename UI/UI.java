@@ -27,7 +27,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog( null, ""+e+"", "ERROR!", JOptionPane. ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,""+e+"","ERROR!",JOptionPane.ERROR_MESSAGE);
         }   
     } 
     

@@ -1,16 +1,13 @@
 package CLI;
-import static CLI.Command.printOccupied;import static CLI.Command.stopTimer;
-import Code.*;import Interface.*;import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Scanner;import java.util.Timer;import java.util.TimerTask;
+import static CLI.Command.Activator;import static CLI.Command.printOccupied;import static CLI.Command.stopTimer;import static CLI.Command.timer1;import Code.*;import Interface.*;import java.math.BigDecimal;import java.math.MathContext;import java.util.Scanner;import java.util.Timer;import java.util.TimerTask;
 /**
  *
  * @author Atahan Ekici
  */
 public class Command implements Interface_Container
 {
-    public static Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
-    static int number1,number2,number3,number4,number5,number6,number7,number8,number9;
+    protected static Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9,timer10;
+    protected static int number1,number2,number3,number4,number5,number6,number7,number8,number9;
     
     protected static A_ParkingArea a1 = new A_ParkingArea();
     protected static A_ParkingArea a2 = new A_ParkingArea();
@@ -26,7 +23,7 @@ public class Command implements Interface_Container
     
     protected static Thread scanner_Thread = new scannerThread();
     
-    public static Command c = new Command();
+    protected static Command c = new Command();
     
     public static final void begin()
     {
@@ -78,47 +75,82 @@ public class Command implements Interface_Container
         }
     }
     
+    public static void Activator()
+    {
+        System.out.println("Press 1 to Main Menu");
+        
+        Helper1.isActive = true;
+        Helper2.isActive = true;
+        Helper3.isActive = true;
+        Helper4.isActive = true;
+        Helper5.isActive = true;
+        Helper6.isActive = true;
+        Helper7.isActive = true;
+        Helper8.isActive = true;
+        Helper9.isActive = true;
+        
+        Scanner scan = new Scanner(System.in); 
+        
+        while(scan.hasNextInt() == false)
+        {
+          scan = new Scanner(System.in); 
+        }
+        
+        if(scan.nextInt() == 1)
+        {
+        Helper1.isActive = false;
+        Helper2.isActive = false;
+        Helper3.isActive = false;
+        Helper4.isActive = false;
+        Helper5.isActive = false;
+        Helper6.isActive = false;
+        Helper7.isActive = false;
+        Helper8.isActive = false;
+        Helper9.isActive = false;
+        }
+    }
+     
     public static void printOccupied()
     {
         String Occupations = null;
         
         if(a1.get_Occupation() == true)
         {
-            Occupations += "A1";
+            Occupations += "A1,";
         }
         if(a2.get_Occupation() == true)
         {
-            Occupations += ",A2";
+            Occupations += "A2,";
         }
          if(a3.get_Occupation() == true)
         {
-            Occupations += ",A3";
+            Occupations += "A3";
         }
          
          if(b1.get_Occupation() == true)
         {
-            Occupations += ",B1";
+            Occupations += "B1,";
         }
          if(b2.get_Occupation() == true)
         {
-            Occupations += ",B2";
+            Occupations += "B2,";
         }
          if(b3.get_Occupation() == true)
         {
-            Occupations += ",B3";
+            Occupations += "B3,";
         }
          
          if(c1.get_Occupation() == true)
         {
-            Occupations += ",C1";
+            Occupations += "C1,";
         }
          if(c2.get_Occupation() == true)
         {
-            Occupations += ",C2";
+            Occupations += "C2,";
         }
          if(c3.get_Occupation() == true)
         {
-            Occupations += ",C3";
+            Occupations += "C3,";
         }
          
          
@@ -650,9 +682,9 @@ class scannerThread extends Thread
     @Override
     public void run()
     {
-       while(choice_t != 11)
+       while(choice_t != 12)
        {
-           System.out.println("Please Select 1 out of 9 parking slots entering 10 displays Occupation 11 will terminate the program:");
+           System.out.println("Please Select 1 out of 9 parking slots entering 10 displays Occupation 11 will loop the timers 12 terminate the program:");
            scanned = new Scanner(System.in);
            
            if(scanned.hasNextInt() == false)
@@ -706,13 +738,17 @@ class scannerThread extends Thread
                    break;
                    
                case 11:
+                   Activator();
+                   break;
+                   
+               case 12:
                    System.out.println("\nProgram Terminated By User\n");
                    scanned.close();
                    System.exit(0);
                    break;
                    
                default:
-                   System.out.println("Wrong input");
+                   System.out.println("\nWrong input\n");
                    break;    
            }
            }   
@@ -722,14 +758,21 @@ class scannerThread extends Thread
 
 class Helper1 extends TimerTask 
 { 
-    Command c = new Command();
     private int i = 7201; 
+    public static boolean isActive = false;
     @Override
     public void run() 
     { 
         if(i <= 0)
         {
         stopTimer(1);
+        this.isActive = false;
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number1 = i;
+        System.out.println("A1: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -743,7 +786,7 @@ class Helper1 extends TimerTask
 
 class Helper2 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -751,6 +794,12 @@ class Helper2 extends TimerTask
         if(i <= 0)
         {
         stopTimer(2);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number2 = i;
+        System.out.println("A2: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -762,11 +811,9 @@ class Helper2 extends TimerTask
     } 
 } 
 
-
-
 class Helper3 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -774,6 +821,12 @@ class Helper3 extends TimerTask
         if(i <= 0)
         {
         stopTimer(3);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number3 = i;
+        System.out.println("A3: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -785,11 +838,9 @@ class Helper3 extends TimerTask
     } 
 } 
 
-
-
 class Helper4 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -797,6 +848,12 @@ class Helper4 extends TimerTask
         if(i <= 0)
         {
         stopTimer(4);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number4 = i;
+        System.out.println("B1: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -811,7 +868,7 @@ class Helper4 extends TimerTask
 
 class Helper5 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -819,6 +876,12 @@ class Helper5 extends TimerTask
         if(i <= 0)
         {
         stopTimer(5);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number5 = i;
+        System.out.println("B2: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -833,7 +896,7 @@ class Helper5 extends TimerTask
 
 class Helper6 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -841,6 +904,12 @@ class Helper6 extends TimerTask
         if(i <= 0)
         {
         stopTimer(6);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number6 = i;
+        System.out.println("B3: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -855,7 +924,7 @@ class Helper6 extends TimerTask
 
 class Helper7 extends TimerTask 
 { 
-    Command c = new Command();
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -863,6 +932,12 @@ class Helper7 extends TimerTask
         if(i <= 0)
         {
          stopTimer(7);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number7 = i;
+        System.out.println("C1: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -874,9 +949,9 @@ class Helper7 extends TimerTask
     } 
 } 
 
-
 class Helper8 extends TimerTask 
 { 
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -884,6 +959,12 @@ class Helper8 extends TimerTask
         if(i <= 0)
         {
         stopTimer(8);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number8 = i;
+        System.out.println("C2: "+Code.Utilities.calculateTime(i));
         }
         else
         {
@@ -895,10 +976,9 @@ class Helper8 extends TimerTask
     } 
 } 
 
-
 class Helper9 extends TimerTask 
-{ 
-    
+{  
+    public static boolean isActive = false;
     private int i = 7201; 
     @Override
     public void run() 
@@ -906,6 +986,12 @@ class Helper9 extends TimerTask
         if(i <= 0)
         {
         stopTimer(9);
+        }
+        else if(isActive == true)
+        {
+            --i;
+        Command.number9 = i;
+        System.out.println("C3: "+Code.Utilities.calculateTime(i));
         }
         else
         {
