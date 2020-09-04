@@ -23,9 +23,9 @@ public class Test
         Food food4 = new Food(4,"Tomato",1.75,1.0);
         Food food5 = new Food(5,"Apple",9.00,1.0);
         
-        Electronics elec1 = new Electronics(1,"Graphics Card",500.0,200.0);
-        Electronics elec2 = new Electronics(2,"RAM",200.0,20.0);
-        Electronics elec3 = new Electronics(3,"Sound Card",100,15);
+        Electronics elec1 = new Electronics(1,"Graphics Card",500.0,20.0);
+        Electronics elec2 = new Electronics(2,"RAM",200.0,3.0);
+        Electronics elec3 = new Electronics(3,"Sound Card",100,10);
         Electronics elec4 = new Electronics(4,"Cooling Fan",20,5);
         Electronics elec5 = new Electronics(5,"MotherBoard",150.0,50);
         
@@ -61,6 +61,13 @@ public class Test
             System.out.println("Press 3 to terminate the program");
             scanned = new Scanner(System.in);
             
+            while(scanned.hasNextInt() == false)
+            {
+                System.out.println("Wrong ınput");
+                scanned = new Scanner(System.in);
+            }
+            secim = scanned.nextInt();
+            
             switch(secim)
             {
                 case 1:
@@ -89,7 +96,7 @@ public class Test
                     double sum = 0;
                     double actual = 0;
                     
-                    if(shoppingCart.isEmpty() == true || shoppingCart.size() == 0)
+                    if(shoppingCart.isEmpty() == true)
                     {
                         System.out.println("No product is selected");
                         break;
@@ -100,6 +107,7 @@ public class Test
                         actual += shoppingCart.get(i).getBasePrice();
                         sum += shoppingCart.get(i).calculateActualPrice();
                     }
+                    System.out.println("Total item(s) in your Cart: "+shoppingCart.size()+"");
                     System.out.println("Your Shopping Cart's Base Value is: "+actual+"");
                     System.out.println("Your Shopping Cart Taxed Value is: "+sum+"");
                     System.exit(0);
