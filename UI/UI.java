@@ -4,11 +4,11 @@ import java.awt.BorderLayout;import java.awt.Color;import java.awt.Component;imp
  *
  * @author Atahan Ekici
  */
-public final class UI extends JFrame implements ActionListener , MouseListener , Interface_Container , KeyListener
+public final class UI extends JFrame implements ActionListener,MouseListener,Interface_Container,KeyListener
 {    
     private static UI single_instance = null;
     
-    public static UI getInstance() // Singleton Pattern so that only one frame will open //
+    public static UI getInstance()
     {
         if(single_instance == null)
         {
@@ -31,47 +31,46 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         }   
     } 
     
-    protected int counter = 1;  
+    private int counter = 1;  
 
-    protected static final Color PALE_BLACK = new Color(33, 37, 41);
+    private static final Color PALE_BLACK = new Color(33, 37, 41);
     
     // ------------------------------------- Swing Components ------------------------------------- //
-    protected JFrame main,park,payment,cash,credit;
-    protected JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
-    protected JTextArea jta;
-    protected JTextField jtf1,jtf2;
-    protected JMenuBar mb;
-    protected JMenu fileMenu,aboutMenu;
-    protected JMenuItem jm_read,jm_new,jm_about,jm_github; // Main Frame Menu Components //
-    protected JMenuItem pop_properties , pop_stop_timer; // Pop-Up Menu Components //
-    protected JScrollPane jsp;
-    protected JOptionPane jop;
-    protected JPopupMenu jpm;
-    protected Component invoker;
+    private JFrame main,park,payment,cash,credit;
+    private JButton clear_button,refresh_button,park_button,park1_button,park2_button,park3_button,park4_button,park5_button,park6_button,park7_button,park8_button,park9_button,payByCash_button,payByCreditCard_button;
+    private JTextArea jta;
+    private JMenuBar mb;
+    private JMenu fileMenu,aboutMenu;
+    private JMenuItem jm_read,jm_new,jm_about,jm_github; // Main Frame Menu Components //
+    private JMenuItem pop_properties , pop_stop_timer; // Pop-Up Menu Components //
+    private JScrollPane jsp;
+    private JPopupMenu jpm;
+    private Component invoker;
     // ------------------------------------- Swing Components ------------------------------------- //
     
-    protected Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
-    protected String key1,key2,key3,key4,key5,key6,key7,key8,key9;
-    protected int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
+    private static Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9;
+    private static String key1,key2,key3,key4,key5,key6,key7,key8,key9;
+    private static int offset1,offset2,offset3,offset4,offset5,offset6,offset7,offset8,offset9;
     
-    protected int current_operation;
-    protected double current_fee;
+    private int current_operation;
+    private double current_fee;
     
-    protected static A_ParkingArea a1 = new A_ParkingArea();
-    protected static A_ParkingArea a2 = new A_ParkingArea();
-    protected static A_ParkingArea a3 = new A_ParkingArea();
+    //------------------------------------- Parking Areas  ------------------------------------- //
+    private static final Park_Area a1 = new A_ParkingArea();
+    private static final Park_Area a2 = new A_ParkingArea();
+    private static final Park_Area a3 = new A_ParkingArea();
     
-    protected static B_ParkingArea b1 = new B_ParkingArea();
-    protected static B_ParkingArea b2 = new B_ParkingArea();
-    protected static B_ParkingArea b3 = new B_ParkingArea();
+    private static final Park_Area b1 = new B_ParkingArea();
+    private static final Park_Area b2 = new B_ParkingArea();
+    private static final Park_Area b3 = new B_ParkingArea();
     
-    protected static C_ParkingArea c1 = new C_ParkingArea();
-    protected static C_ParkingArea c2 = new C_ParkingArea();
-    protected static C_ParkingArea c3 = new C_ParkingArea();
+    private static final Park_Area c1 = new C_ParkingArea();
+    private static final Park_Area c2 = new C_ParkingArea();
+    private static final Park_Area c3 = new C_ParkingArea();
+    //------------------------------------- Parking Areas ------------------------------------- //
     
     private void Construct_Main_Frame() throws IOException     // Constructs the Main Frame //  
     {
-    
         main = new JFrame("SE116 Project - Main Frame");
         ImageIcon image = new ImageIcon(getClass().getResource("/Icons/icon.png"));
         main.setIconImage(image.getImage());
@@ -182,12 +181,12 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     }
     
     private static double round(double value) // Rounds given presicion integer into 3 significant figures //
-        {
+    {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.round(new MathContext(3));
         value = bd.doubleValue();
         return value;
-        }
+    }
     
     private void Construct_Payment_Frame() throws IOException // Constructs Payment Frame //
     {
@@ -207,7 +206,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 });
-        
         JPanel tutucu = new JPanel();
         tutucu.setLayout(new GridLayout());
         tutucu.setBackground(PALE_BLACK);
@@ -232,14 +230,14 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     }
          
         
-    private void Construct_PayByCash(double fee)
+    private void Construct_PayByCash(double fee) // Constructs the pay by cash Menu //
         {
         cash = new JFrame("Pay With Cash Menu");
         cash.getContentPane().setBackground(PALE_BLACK);
         cash.setLayout(null);
         cash.setSize(300,300);
         cash.setResizable(false);
-        cash.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cash.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         fee = round(fee);
         
@@ -258,9 +256,9 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     @Override
     public void actionPerformed(ActionEvent e)
     {  
-                current_fee = (100 - current_fee);
-                JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
-                cash.dispose();
+        current_fee = (100 - current_fee);
+        JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
+        cash.dispose();
     }  
     }));
         
@@ -272,7 +270,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
 });
-        
         JButton fifty = new JButton();  
         fifty.setText("50 TL");
         fifty.setBounds(110,200,72,30);
@@ -286,7 +283,6 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                 cash.dispose();
     }  
     }));
-        
         JButton twenty = new JButton();  
         twenty.setText("20 TL");
         twenty.setBounds(190,200,72,30);
@@ -299,8 +295,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
              JOptionPane.showMessageDialog( null, "Your change is :"+current_fee+"", "Payment Successfull", JOptionPane.INFORMATION_MESSAGE);
              cash.dispose();
     }  
-    }));
-        
+    }));   
         cash.add(label);
         cash.add(hundred);
         cash.add(fifty);
@@ -308,15 +303,15 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         cash.setLocationRelativeTo(null);
         }
         
-    private void Construct_PayByCreditCard(double fee)
+    private void Construct_PayByCreditCard(double fee) // Constructs the pay by credit card menu //
         {
-        {
+        
         credit = new JFrame("Pay With Cash Menu");
         credit.getContentPane().setBackground(PALE_BLACK);
         credit.setLayout(null);
         credit.setSize(300,300);
         credit.setResizable(false);
-        credit.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        credit.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         fee = round(fee);
         
@@ -382,8 +377,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     {
         JOptionPane.showMessageDialog( null, "You have to pay the bill", "ERROR!", JOptionPane.ERROR_MESSAGE);
     }
-});
-        
+}); 
         credit.add(label);
         credit.add(label2);
         credit.add(label3);
@@ -392,9 +386,8 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
         credit.add(hundred);
         credit.setLocationRelativeTo(null);
         }
-        }
         
-    private void Construct_Parking_slots() throws IOException 
+    private void Construct_Parking_slots() throws IOException // Constructs Parking Slots Frame //
     {
         park = new JFrame("Park Menu");
         ImageIcon image = new ImageIcon(getClass().getResource("/Icons/park.png"));
@@ -522,27 +515,30 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
     {
         jta.append(""+counter+")Frame Refreshed\n\n");
         counter++;
-        main.setVisible(false);   
+        
+        main.setVisible(false);
+        park.setVisible(false);
+        
         main.repaint();
+        park.repaint();
+        
         main.revalidate();
+        park.revalidate();
+        
         main.setVisible(true);
-        main.setAutoRequestFocus(true);
-        jta.requestFocus();
+        park.setVisible(true);
+        
+        if(park.isActive() == true)
+        {
+            park.requestFocus();
+        }
+        else
+        {
+            main.requestFocus();
+        }  
     }
     
-    private void deleteFile(File file) // Deletes the given file //
-    {
-    if (file.delete())
-    { 
-      JOptionPane.showMessageDialog( null, "File Deleted Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-    } 
-    else 
-    {
-      JOptionPane.showMessageDialog( null, "Could not delete the file", "ERROR!", JOptionPane.ERROR_MESSAGE);
-    } 
-    }
-    
-    private void Save_To_File(String text)
+    private void Save_To_File(String text) // Saves the ticket information //
     {
                BufferedWriter writer;
                JFileChooser jfc;
@@ -572,7 +568,7 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
                }
     }
     
-    private String Check_Key()
+    private String Check_Key() // checks for the given ticket //
     {
         String content = null;
         
@@ -960,47 +956,47 @@ public final class UI extends JFrame implements ActionListener , MouseListener ,
             
             if(invoker == park1_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot1: "+a1.get_parkingSlot()+"\n"+a1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a1.get_parkingSlot()+"\n"+a1.toString()+"\nSlot Type: "+a1.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park2_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot2: "+a2.get_parkingSlot()+"\n"+a2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a2.get_parkingSlot()+"\n"+a2.toString()+"\nSlot Type: "+a2.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park3_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot3: "+a3.get_parkingSlot()+"\n"+a3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+a3.get_parkingSlot()+"\n"+a3.toString()+"\nSlot Type: "+a3.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park4_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot4: "+b1.get_parkingSlot()+"\n"+b1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b1.get_parkingSlot()+"\n"+b1.toString()+"\nSlot Type: "+b1.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park5_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot5: "+b2.get_parkingSlot()+"\n"+b2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b2.get_parkingSlot()+"\n"+b2.toString()+"\nSlot Type: "+b2.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park6_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot6: "+b3.get_parkingSlot()+"\n"+b3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+b3.get_parkingSlot()+"\n"+b3.toString()+"\nSlot Type: "+b3.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park7_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot7: "+c1.get_parkingSlot()+"\n"+c1.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c1.get_parkingSlot()+"\n"+c1.toString()+"\nSlot Type: "+c1.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park8_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot8: "+c2.get_parkingSlot()+"\n"+c2.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c2.get_parkingSlot()+"\n"+c2.toString()+"\nSlot Type: "+c2.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
             
             else if(invoker == park9_button)
             {
-                JOptionPane.showMessageDialog(null,"Park Slot9: "+c3.get_parkingSlot()+"\n"+c3.toString()+"","Properties",INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Park Slot: "+c3.get_parkingSlot()+"\n"+c3.toString()+"\nSlot Type: "+c3.parking_slot_type()+"","Properties",INFORMATION_MESSAGE);
             }
         }
         
@@ -1506,6 +1502,6 @@ repaint();
         }    
     }
     
-@Override public void keyTyped(KeyEvent e){}
-@Override public void keyReleased(KeyEvent e){}
+@Override public void keyTyped(KeyEvent e){} // Not Needed //
+@Override public void keyReleased(KeyEvent e){} // Not Needed //
 }

@@ -9,17 +9,17 @@ public class Command implements Interface_Container
     protected static Timer timer1,timer2,timer3,timer4,timer5,timer6,timer7,timer8,timer9,timer10;
     protected static int number1,number2,number3,number4,number5,number6,number7,number8,number9;
     
-    protected static A_ParkingArea a1 = new A_ParkingArea();
-    protected static A_ParkingArea a2 = new A_ParkingArea();
-    protected static A_ParkingArea a3 = new A_ParkingArea();
+    protected static Park_Area a1 = new A_ParkingArea();
+    protected static Park_Area a2 = new A_ParkingArea();
+    protected static Park_Area a3 = new A_ParkingArea();
     
-    protected static B_ParkingArea b1 = new B_ParkingArea();
-    protected static B_ParkingArea b2 = new B_ParkingArea();
-    protected static B_ParkingArea b3 = new B_ParkingArea();
+    protected static Park_Area b1 = new B_ParkingArea();
+    protected static Park_Area b2 = new B_ParkingArea();
+    protected static Park_Area b3 = new B_ParkingArea();
     
-    protected static C_ParkingArea c1 = new C_ParkingArea();
-    protected static C_ParkingArea c2 = new C_ParkingArea();
-    protected static C_ParkingArea c3 = new C_ParkingArea();
+    protected static Park_Area c1 = new C_ParkingArea();
+    protected static Park_Area c2 = new C_ParkingArea();
+    protected static Park_Area c3 = new C_ParkingArea();
     
     protected static Thread scanner_Thread = new scannerThread();
     
@@ -766,7 +766,7 @@ class Helper1 extends TimerTask
         if(i <= 0)
         {
         stopTimer(1);
-        this.isActive = false;
+        Helper1.isActive = false;
         }
         else if(isActive == true)
         {

@@ -1,5 +1,4 @@
 package Main;
-import CLI.*;
 import UI.*;
 /**
  *
@@ -9,8 +8,6 @@ public class Main extends Thread
 {
     public static void main(String[] args)
     {
-        Command.begin();
-        //CLI.getInstance();
-        //UI.getInstance();
+        UI.getInstance();
     }
 }

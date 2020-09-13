@@ -16,6 +16,11 @@ public abstract class Park_Area
     {
         this.fee = fee;
     }
+    
+    public String parking_slot_type()
+    {
+        return "None";
+    }
        
     public double get_fee()       
     {
@@ -38,10 +43,15 @@ public abstract class Park_Area
          return "Fee: "+this.get_fee()+"\n Occupation: "+this.get_Occupation()+"";
      }
     
-    public double calculate_Discount(int hour)
+        public int get_parkingSlot()
+    {
+        return Park_Area.parks.size();
+    }
+    
+    public double calculate_Discount(int second)
      {
         double park_fee_brut = (this.get_fee() / 7200); // get the parking fee of the park area //
-        int time_spent = 7200 - hour; // get the number of seconds it spent on the parking spot //
+        int time_spent = 7200 - second; // get the number of seconds it spent on the parking spot //
         return (park_fee_brut * time_spent);
      }
 }

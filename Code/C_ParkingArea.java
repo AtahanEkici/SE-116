@@ -1,8 +1,7 @@
 package Code;
-
 /**
  *
- * @author ataha
+ * @author Atahan Ekici
  */
 public class C_ParkingArea extends Park_Area
 {
@@ -11,19 +10,26 @@ public class C_ParkingArea extends Park_Area
     public C_ParkingArea(double fee)
     {
         this.fee = fee;
+        this.Is_Occupied = false;
         parks.add(this);
         this.park_slot = parks.size();
-        this.Is_Occupied = false;
     }
     
-     public C_ParkingArea()
+    public C_ParkingArea()
     {
         this.fee = 20.0;
+        this.Is_Occupied = false;
         parks.add(this);
         this.park_slot = parks.size();
-        this.Is_Occupied = false;
     }
      
+    @Override
+     public String parking_slot_type()
+    {
+        return "C";
+    }
+    
+    @Override
     public int get_parkingSlot()
     {
         return this.park_slot;
