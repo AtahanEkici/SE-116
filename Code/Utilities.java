@@ -1,6 +1,5 @@
 package Code;
-import java.nio.charset.StandardCharsets;import java.security.MessageDigest;import java.util.ArrayList;import java.util.Base64;import java.util.Calendar;import java.util.Date;import java.util.List;import java.util.logging.Level;import java.util.logging.Logger;import javax.swing.JOptionPane;
-
+import java.nio.charset.StandardCharsets;import java.security.MessageDigest;import java.util.Base64;import java.util.Calendar;import java.util.Date;import javax.swing.JOptionPane;
 /**
  *
  * @author Atahan Ekici
@@ -18,7 +17,7 @@ int day = calendar.get(Calendar.DAY_OF_MONTH);
 int hours = calendar.get(Calendar.HOUR_OF_DAY);
 int minutes = calendar.get(Calendar.MINUTE);
 int seconds = calendar.get(Calendar.SECOND);
-return String.format("%02d.%02d.%04d %02d:%02d:%02d",day,month,year,hours,minutes,seconds);
+return String.format("%02d.%02d.%04d%02d:%02d:%02d",day,month,year,hours,minutes,seconds);
 }
     
 public static String calculateTime(int seconds)

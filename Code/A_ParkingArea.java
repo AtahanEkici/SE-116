@@ -4,9 +4,9 @@ package Code;
  * @author Atahan Ekici
  */
 public class A_ParkingArea extends Park_Area
-{
+{  
     private final int park_slot;
-    
+
     public A_ParkingArea(double fee)
     {
         this.fee = fee;
@@ -22,19 +22,19 @@ public class A_ParkingArea extends Park_Area
         parks.add(this);
         this.park_slot = parks.size();
     } 
-     
+    
     @Override
     public String parking_slot_type()
     {
         return "A";
     }
-     
+    
     @Override
     public int get_parkingSlot()
     {
         return this.park_slot;
     }
-     
+    
     @Override
       public double calculate_Discount(int second)        
       {

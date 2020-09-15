@@ -4,7 +4,7 @@ import UI.*;
  *
  * @author Atahan Ekici
  */
-public class Main extends Thread
+public class Main
 {
     public static void main(String[] args)
     {

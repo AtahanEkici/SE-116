@@ -1,7 +1,5 @@
 package Code;
-
 import java.util.ArrayList;
-
 /**
  *
  * @author Atahan Ekici
@@ -9,29 +7,27 @@ import java.util.ArrayList;
 public abstract class Park_Area
 {
     protected static ArrayList<Park_Area> parks = new ArrayList();
-    protected double  fee;
+    protected double fee;
     protected boolean Is_Occupied; 
     
     public void set_fee(int fee)
     {
         this.fee = fee;
+    }  
+    public double get_fee()       
+    {
+        return this.fee;
     }
     
     public String parking_slot_type()
     {
-        return "None";
-    }
-       
-    public double get_fee()       
-    {
-        return this.fee;
+        return "Not Specified";
     }
     
     public void set_Occupation(boolean Occupation)
     {
         this.Is_Occupied = Occupation;
     }
-    
     public boolean get_Occupation()
     {
         return this.Is_Occupied;
@@ -39,20 +35,10 @@ public abstract class Park_Area
     
    @Override
     public String toString()
-     {
-         return "Fee: "+this.get_fee()+"\n Occupation: "+this.get_Occupation()+"";
-     }
-    
-        public int get_parkingSlot()
     {
-        return Park_Area.parks.size();
+        return "Fee: "+this.get_fee()+"\n Occupation: "+this.get_Occupation()+"";
     }
     
-    public double calculate_Discount(int second)
-     {
-        double park_fee_brut = (this.get_fee() / 7200); // get the parking fee of the park area //
-        int time_spent = 7200 - second; // get the number of seconds it spent on the parking spot //
-        return (park_fee_brut * time_spent);
-     }
+    public abstract int get_parkingSlot();
+    public abstract double calculate_Discount(int second);  
 }
-

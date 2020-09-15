@@ -33,7 +33,7 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
     
     private int counter = 1;  
 
-    private static final Color PALE_BLACK = new Color(33, 37, 41);
+    private static final Color PALE_BLACK = new Color(33, 37, 41); // Frame Content Pane Color //
     
     // ------------------------------------- Swing Components ------------------------------------- //
     private JFrame main,park,payment,cash,credit;
@@ -177,7 +177,7 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
         main.setLocationRelativeTo(null); // initially start the frame at the center of the screen //
         main.setVisible(true);        
         main.setAutoRequestFocus(true);
-        main.getContentPane().requestFocus();
+        main.requestFocus();
     }
     
     private static double round(double value) // Rounds given presicion integer into 3 significant figures //
@@ -306,7 +306,7 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
     private void Construct_PayByCreditCard(double fee) // Constructs the pay by credit card menu //
         {
         
-        credit = new JFrame("Pay With Cash Menu");
+        credit = new JFrame("Pay With Credit Card Menu");
         credit.getContentPane().setBackground(PALE_BLACK);
         credit.setLayout(null);
         credit.setSize(300,300);
@@ -517,7 +517,6 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
         counter++;
         
         main.setVisible(false);
-        park.setVisible(false);
         
         main.repaint();
         park.repaint();
@@ -526,16 +525,6 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
         park.revalidate();
         
         main.setVisible(true);
-        park.setVisible(true);
-        
-        if(park.isActive() == true)
-        {
-            park.requestFocus();
-        }
-        else
-        {
-            main.requestFocus();
-        }  
     }
     
     private void Save_To_File(String text) // Saves the ticket information //
@@ -1297,7 +1286,7 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
             }
     }
     
-        else if(Event.getSource() == jm_new) 
+        else if(Event.getSource() == jm_new) // Reads a String from User and append it to the specified file //
     {
        try
      {  
@@ -1335,12 +1324,11 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
         else
         {
             jta.append(""+counter+") Error: "+e.getClass().getCanonicalName()+" \n\n ");
-                counter++;
-                JOptionPane.showMessageDialog( null, ""+e.getMessage()+"", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
+            counter++;
+            JOptionPane.showMessageDialog( null, ""+e.getMessage()+"", ""+e.getClass().getCanonicalName()+"", JOptionPane. ERROR_MESSAGE);
         }         
     }
   }
-    
         else if(Event.getSource() == jm_read)
         {
             try
@@ -1377,7 +1365,7 @@ public final class UI extends JFrame implements ActionListener,MouseListener,Int
                     reader.close();
                 }
                 
-String content = stringBuilder.toString().replaceAll(" ", "");
+String content = stringBuilder.toString();
 jta.append(""+content+" \n\n");
 counter++;
 validate();
@@ -1498,6 +1486,7 @@ repaint();
     {
         if (e.getKeyCode()== KeyEvent.VK_F5)
         {
+            main.requestFocus();
             refresh();
         }    
     }
