@@ -21,3 +21,7 @@ for the time they did not used for the given park slot. The payment methods will
 ==> This software will contain inheritance, overloading, polymorphism, overriding and exception handling.
 
 ==> Upon reserving his/her park slot the User will receive a parking ticket which will consists of a SHA_256 key stored in the program. If the User wants to leave early this key will be used to give the user a discount for the time it is not used.
+
+
+## Screen Shot
+![Alt Text](https://github.com/AtahanEkici/SE-116/blob/master/SE116.png)
